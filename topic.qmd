@@ -1,6 +1,5 @@
-# Topic
+# Infectious Disease Modeling with ML
 
-Pick some subset of the information covered in your annual review article that you are interested in exploring in more detail. 
+For the scope, I plan to write a user guide that discusses overarching types of machine learning, such as regression and classification, and its applications with infectious disease modeling, such as using neural networks or decision trees to artificially recreate the interaction between groups of people. I will go into more depth with one of the applications of machine learning that is of my choice. To illustrate an example, I will use a simulated or found data set and apply the method of machine learning to show predicted outcomes. An example could be this [Kaggle](https://www.kaggle.com/datasets/darkknight98/flu-shot-prediction) data set on vaccine survey data. The goal would be to predict whether or not the person chooses to take the flu shot. The language that I will use will be R.
 
-Identify the scope of your user guide - what will you cover? Specific software packages? When to use or not to use a specific technique?
-
+Another potential candidate is a breakdown on how to use machine learning to model and predict the spread of [coronavirus in Finland](https://www.kaggle.com/code/artgor/finland-and-coronavirus/notebook).
