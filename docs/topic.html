@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-02-01">
+<meta name="dcterms.date" content="2026-02-04">
 
-<title>Appendix A — Infectious Disease Modeling with ML – User Guide: Annual Review Article Topic</title>
+<title>Appendix A — Infectious Disease Modeling using Compartment Models in R – User Guide: Annual Review Article Topic</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -71,6 +71,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -83,7 +112,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./topic.html">Appendices</a></li><li class="breadcrumb-item"><a href="./topic.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Infectious Disease Modeling with ML</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./topic.html">Appendices</a></li><li class="breadcrumb-item"><a href="./topic.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Infectious Disease Modeling using Compartment Models in R</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -138,7 +167,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./topic.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Infectious Disease Modeling with ML</span></span></a>
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Infectious Disease Modeling using Compartment Models in R</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -166,9 +195,9 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./topic.html">Appendices</a></li><li class="breadcrumb-item"><a href="./topic.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Infectious Disease Modeling with ML</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./topic.html">Appendices</a></li><li class="breadcrumb-item"><a href="./topic.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Infectious Disease Modeling using Compartment Models in R</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Appendix A — Infectious Disease Modeling with ML</h1>
+<h1 class="title">Appendix A — Infectious Disease Modeling using Compartment Models in R</h1>
 </div>
 
 
@@ -179,7 +208,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 1, 2026</p>
+      <p class="date">February 4, 2026</p>
     </div>
   </div>
   
@@ -191,8 +220,10 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>For the scope, I plan to write a user guide that discusses overarching types of machine learning, such as regression and classification, and its applications with infectious disease modeling, such as using neural networks or decision trees to artificially recreate the interaction between groups of people. I will go into more depth with one of the applications of machine learning that is of my choice. To illustrate an example, I will use a simulated or found data set and apply the method of machine learning to show predicted outcomes. An example could be this <a href="https://www.kaggle.com/datasets/darkknight98/flu-shot-prediction">Kaggle</a> data set on vaccine survey data. The goal would be to predict whether or not the person chooses to take the flu shot. The language that I will use will be R.</p>
-<p>Another potential candidate is a breakdown on how to use machine learning to model and predict the spread of <a href="https://www.kaggle.com/code/artgor/finland-and-coronavirus/notebook">coronavirus in Finland</a>.</p>
+<p>For the scope, I plan to write a user guide that goes through how to set up a compartment model in R. I would have to research the packages that could be used and find a data set in order to provide an example of how to set up the model. Potentially, I could simulate a data set, but more research would be needed to figure out what data would need to be simulated.</p>
+<p>A compartment model would use the following differential equations that model the SEIR (susceptible, exposed, infectious, recovered) framework.</p>
+<p><span class="math display">\[\frac{dS(t)}{dt}=-\beta\frac{S(t)I(t)}{N},\]</span> <span class="math display">\[\frac{dI(t)}{dt}=\beta\frac{S(t)I(t)}{N}-\sigma E(t),\]</span> <span class="math display">\[\frac{dI(t)}{dt}=\sigma E(t)-\gamma I(t),\]</span> <span class="math display">\[\frac{dR(t)}{dt}=\gamma I(t),\]</span></p>
+<p>One interesting topic that I could consider is using COVID-19 data as one of the referenced articles used SAPHIRE, a different compartmental model, to simulate the spread of COVID-19 in Wuhan, Singapore. The data was made available in the article found <a href="https://github.com/chaolongwang/SAPHIRE">here</a>. Their code for their model is found <a href="https://github.com/chaolongwang/SAPHIRE">here</a> as well, only needing modifications to fit the simpler SEIR framework.</p>
 
 
 
