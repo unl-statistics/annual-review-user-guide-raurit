@@ -10,3 +10,10 @@ $$\frac{dI(t)}{dt}=\sigma E(t)-\gamma I(t),$$
 $$\frac{dR(t)}{dt}=\gamma I(t),$$
 
 One interesting topic that I could consider is using COVID-19 data as one of the referenced articles used SAPHIRE, a different compartmental model, to simulate the spread of COVID-19 in Wuhan, Singapore. The data was made available in the article found [here](https://github.com/chaolongwang/SAPHIRE). Their code for their model is found [here](https://github.com/chaolongwang/SAPHIRE) as well, only needing modifications to fit the simpler SEIR framework.
+
+
+::: callout-note
+# Comments/suggestions
+
+I suggest also considering the visualization of compartment models - there may be some cool packages for that since COVID. Lots of people with too much time at home and nothing to do but make R packages. 
+:::
