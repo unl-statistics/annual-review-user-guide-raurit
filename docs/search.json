@@ -1,0 +1,122 @@
+[
+  {
+    "objectID": "task-analysis.html",
+    "href": "task-analysis.html",
+    "title": "Appendix C — Task Analysis",
+    "section": "",
+    "text": "C.1 What are the prerequisites, for both knowledge and e.g. software setup?\nI will preface saying that I changed my user guide project goal. Instead of going for compartmental models, I will be writing how to forecast data, including speaking on the drawbacks of two packages for Covid-19 data. The repository that I was originally working with was outdated and there were many issues with the code. I was unable to properly run it on my machine.\nHere are some questions to guide you through the process of doing a task analysis. You don’t have to specifically answer each one of these (and some may not apply), but they should get you started thinking in the right direction.\nThe prerequisites include: - Knowing how to filter data sets to get the proper data - basic RStudio knowledge with potential debugging",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Task Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "task-analysis.html#what-are-the-basic-requirements-for-any-data-that-the-method-is-used-on",
+    "href": "task-analysis.html#what-are-the-basic-requirements-for-any-data-that-the-method-is-used-on",
+    "title": "Appendix C — Task Analysis",
+    "section": "C.2 What are the basic requirements for any data that the method is used on?",
+    "text": "C.2 What are the basic requirements for any data that the method is used on?\n\nAre missing values allowed? no\nShould the data be confined within a certain range? nope, but more data allows for a better prediction\nDoes the data have to be approximately normally distributed? nope",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Task Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "task-analysis.html#what-are-the-basic-components-of-the-task",
+    "href": "task-analysis.html#what-are-the-basic-components-of-the-task",
+    "title": "Appendix C — Task Analysis",
+    "section": "C.3 What are the basic components of the task?",
+    "text": "C.3 What are the basic components of the task?\n\nOpen RStudio\nInstall packages\n\nlibrary(covid19.analytics)\nlibrary(dplyr)\nlibrary(lubridate)\nlibrary(ggplot2)\nlibrary(forecast)\nlibrary(readr)\nlibrary(skimr)\nlibrary(prophet)\n\nchange the date format using lubridate\ncreate a new column in the dataset from previous ones\nforecast new data\nplot both on the same graph\ncompare forecasting between prophet and forecast",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Task Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "task-analysis.html#what-decisions-does-the-user-need-to-be-prepared-to-make-on-the-fly",
+    "href": "task-analysis.html#what-decisions-does-the-user-need-to-be-prepared-to-make-on-the-fly",
+    "title": "Appendix C — Task Analysis",
+    "section": "C.4 What decisions does the user need to be prepared to make on the fly?",
+    "text": "C.4 What decisions does the user need to be prepared to make on the fly?\n\nThey need to determine what dataset to use and how to accommodate for missing values if there are any. ## What questions should the user ask of the “first draft” of the product? What adjustments may need to be made?",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Task Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "task-analysis.html#additional-guidance",
+    "href": "task-analysis.html#additional-guidance",
+    "title": "Appendix C — Task Analysis",
+    "section": "C.5 Additional Guidance",
+    "text": "C.5 Additional Guidance\nYour check-in should answer these basic questions (and similar concerns that apply more directly to your topic).\nOnce you’ve completed the check-in, you can use this section to jump-start an introduction/set-up/getting started section in your user guide. This document should remain as an appendix to your main report.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Task Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "guide.html",
+    "href": "guide.html",
+    "title": "1  User Guide",
+    "section": "",
+    "text": "First off, you should change this section title to something more appropriate.\nNext, well, that’s up to you. Good luck!",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>User Guide</span>"
+    ]
+  },
+  {
+    "objectID": "topic.html",
+    "href": "topic.html",
+    "title": "Appendix A — Infectious Disease Modeling using Compartment Models in R",
+    "section": "",
+    "text": "For the scope, I plan to write a user guide that goes through how to set up a compartment model in R. I would have to research the packages that could be used and find a data set in order to provide an example of how to set up the model. Potentially, I could simulate a data set, but more research would be needed to figure out what data would need to be simulated.\nA compartment model would use the following differential equations that model the SEIR (susceptible, exposed, infectious, recovered) framework.\n\\[\\frac{dS(t)}{dt}=-\\beta\\frac{S(t)I(t)}{N},\\] \\[\\frac{dI(t)}{dt}=\\beta\\frac{S(t)I(t)}{N}-\\sigma E(t),\\] \\[\\frac{dI(t)}{dt}=\\sigma E(t)-\\gamma I(t),\\] \\[\\frac{dR(t)}{dt}=\\gamma I(t),\\]\nOne interesting topic that I could consider is using COVID-19 data as one of the referenced articles used SAPHIRE, a different compartmental model, to simulate the spread of COVID-19 in Wuhan, Singapore. The data was made available in the article found here. Their code for their model is found here as well, only needing modifications to fit the simpler SEIR framework.\n\n\n\n\n\n\nComments/suggestions\n\n\n\nI suggest also considering the visualization of compartment models - there may be some cool packages for that since COVID. Lots of people with too much time at home and nothing to do but make R packages.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Infectious Disease Modeling using Compartment Models in R</span>"
+    ]
+  },
+  {
+    "objectID": "needs.html",
+    "href": "needs.html",
+    "title": "Appendix B — Needs Assessment",
+    "section": "",
+    "text": "B.1 What does someone trying to accomplish your chosen task need help with?",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Needs Assessment</span>"
+    ]
+  },
+  {
+    "objectID": "needs.html#what-does-someone-trying-to-accomplish-your-chosen-task-need-help-with",
+    "href": "needs.html#what-does-someone-trying-to-accomplish-your-chosen-task-need-help-with",
+    "title": "Appendix B — Needs Assessment",
+    "section": "",
+    "text": "data cleaning\nfinding a good source for data\n\nwill demonstrate with data from Canada, but the data from other countries in covid19,analytics may not take the same form",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Needs Assessment</span>"
+    ]
+  },
+  {
+    "objectID": "needs.html#what-parts-are-likely-to-be-tricky",
+    "href": "needs.html#what-parts-are-likely-to-be-tricky",
+    "title": "Appendix B — Needs Assessment",
+    "section": "B.2 What parts are likely to be tricky?",
+    "text": "B.2 What parts are likely to be tricky?\n\nMaking sure that the data is in the correct format so that the plotting can work properly with the functions that were written and the forecasting knows what to pull from",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Needs Assessment</span>"
+    ]
+  },
+  {
+    "objectID": "needs.html#what-resources-are-already-available-on-this-topic-that-may-be-helpful-look-for-e.g.-software-vignettes-package-documentation-papers-about-software-packages-and-so-on.",
+    "href": "needs.html#what-resources-are-already-available-on-this-topic-that-may-be-helpful-look-for-e.g.-software-vignettes-package-documentation-papers-about-software-packages-and-so-on.",
+    "title": "Appendix B — Needs Assessment",
+    "section": "B.3 What resources are already available on this topic that may be helpful? Look for e.g. software vignettes, package documentation, papers about software packages, and so on.",
+    "text": "B.3 What resources are already available on this topic that may be helpful? Look for e.g. software vignettes, package documentation, papers about software packages, and so on.\n\nhttps://www.geeksforgeeks.org/r-language/data-cleaning-in-r/\nhttps://srvanderplas.github.io/stat-computing-r-python/",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Needs Assessment</span>"
+    ]
+  }
+]

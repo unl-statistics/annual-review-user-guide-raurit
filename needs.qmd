@@ -1,9 +1,13 @@
 # Needs Assessment {.appendix}
 
-What does someone trying to accomplish your chosen task need help with? 
+## What does someone trying to accomplish your chosen task need help with? 
+- data cleaning
+- finding a good source for data
+  - will demonstrate with data from Canada, but the data from other countries in `covid19,analytics` may not take the same form
 
-What parts are likely to be tricky? 
+## What parts are likely to be tricky? 
+- Making sure that the data is in the correct format so that the plotting can work properly with the functions that were written and the forecasting knows what to pull from 
 
-What resources are already available on this topic that may be helpful? Look for e.g. software vignettes, package documentation, papers about software packages, and so on.
-
-
+## What resources are already available on this topic that may be helpful? Look for e.g. software vignettes, package documentation, papers about software packages, and so on.
+- https://www.geeksforgeeks.org/r-language/data-cleaning-in-r/
+- https://srvanderplas.github.io/stat-computing-r-python/
