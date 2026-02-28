@@ -5,6 +5,12 @@
 - finding a good source for data
   - will demonstrate with data from Canada, but the data from other countries in `covid19,analytics` may not take the same form
 
+::: callout-note
+
+Wait, no chance they need help with forecasting? How can that go wrong?
+
+:::
+
 ## What parts are likely to be tricky? 
 - Making sure that the data is in the correct format so that the plotting can work properly with the functions that were written and the forecasting knows what to pull from 
 

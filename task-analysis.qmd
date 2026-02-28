@@ -34,7 +34,14 @@ The prerequisites include:
   - compare forecasting between `prophet` and `forecast`
 
 ## What decisions does the user need to be prepared to make on the fly?
+
 - They need to determine what dataset to use and how to accommodate for missing values if there are any.
+
+::: callout-note
+Are you planning to address this issue? If so, how?
+
+:::
+
 ## What questions should the user ask of the "first draft" of the product? What adjustments may need to be made?
 
 
