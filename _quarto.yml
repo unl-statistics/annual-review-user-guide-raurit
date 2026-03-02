@@ -9,11 +9,11 @@ from: markdown+emoji
 
 book:
   title: "User Guide: Annual Review Article Topic"
-  author: "Author Name"
+  author: "Rayne Aurit"
   page-footer:
-    left: "Copyright 2025, Author Name"
+    left: "Copyright 2026, Rayne Aurit"
   chapters:
-    - index.qmd # Remove this before you submit your final report!
+    #- index.qmd # Remove this before you submit your final report!
     - guide.qmd
     - references.qmd
   appendices:
