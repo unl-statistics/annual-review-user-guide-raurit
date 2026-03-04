@@ -37,7 +37,7 @@
     "href": "task-analysis.html#what-decisions-does-the-user-need-to-be-prepared-to-make-on-the-fly",
     "title": "Appendix C — Task Analysis",
     "section": "C.4 What decisions does the user need to be prepared to make on the fly?",
-    "text": "C.4 What decisions does the user need to be prepared to make on the fly?\n\nThey need to determine what dataset to use and how to accommodate for missing values if there are any. ## What questions should the user ask of the “first draft” of the product? What adjustments may need to be made?",
+    "text": "C.4 What decisions does the user need to be prepared to make on the fly?\n\nThey need to determine what dataset to use and how to accommodate for missing values if there are any.\n\n\n\n\n\n\n\nNote\n\n\n\nAre you planning to address this issue? If so, how?",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>C</span>  <span class='chapter-title'>Task Analysis</span>"
@@ -47,8 +47,8 @@
     "objectID": "task-analysis.html#additional-guidance",
     "href": "task-analysis.html#additional-guidance",
     "title": "Appendix C — Task Analysis",
-    "section": "C.5 Additional Guidance",
-    "text": "C.5 Additional Guidance\nYour check-in should answer these basic questions (and similar concerns that apply more directly to your topic).\nOnce you’ve completed the check-in, you can use this section to jump-start an introduction/set-up/getting started section in your user guide. This document should remain as an appendix to your main report.",
+    "section": "C.6 Additional Guidance",
+    "text": "C.6 Additional Guidance\nYour check-in should answer these basic questions (and similar concerns that apply more directly to your topic).\nOnce you’ve completed the check-in, you can use this section to jump-start an introduction/set-up/getting started section in your user guide. This document should remain as an appendix to your main report.",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>C</span>  <span class='chapter-title'>Task Analysis</span>"
@@ -57,11 +57,11 @@
   {
     "objectID": "guide.html",
     "href": "guide.html",
-    "title": "1  User Guide",
+    "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
     "section": "",
-    "text": "First off, you should change this section title to something more appropriate.\nNext, well, that’s up to you. Good luck!",
+    "text": "1.1 1. Open RStudio\nThis user guide will demonstrate how to attain data from COVID-19 using the covid19.analytics\nIf you have not yet installed RStudio or would like to update your version of RStudio, visit the following link: https://posit.co/downloads/. Create a new R script.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>User Guide</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
     ]
   },
   {
@@ -69,7 +69,7 @@
     "href": "topic.html",
     "title": "Appendix A — Infectious Disease Modeling using Compartment Models in R",
     "section": "",
-    "text": "For the scope, I plan to write a user guide that goes through how to set up a compartment model in R. I would have to research the packages that could be used and find a data set in order to provide an example of how to set up the model. Potentially, I could simulate a data set, but more research would be needed to figure out what data would need to be simulated.\nA compartment model would use the following differential equations that model the SEIR (susceptible, exposed, infectious, recovered) framework.\n\\[\\frac{dS(t)}{dt}=-\\beta\\frac{S(t)I(t)}{N},\\] \\[\\frac{dI(t)}{dt}=\\beta\\frac{S(t)I(t)}{N}-\\sigma E(t),\\] \\[\\frac{dI(t)}{dt}=\\sigma E(t)-\\gamma I(t),\\] \\[\\frac{dR(t)}{dt}=\\gamma I(t),\\]\nOne interesting topic that I could consider is using COVID-19 data as one of the referenced articles used SAPHIRE, a different compartmental model, to simulate the spread of COVID-19 in Wuhan, Singapore. The data was made available in the article found here. Their code for their model is found here as well, only needing modifications to fit the simpler SEIR framework.\n\n\n\n\n\n\nComments/suggestions\n\n\n\nI suggest also considering the visualization of compartment models - there may be some cool packages for that since COVID. Lots of people with too much time at home and nothing to do but make R packages.",
+    "text": "For the scope, I plan to write a user guide that goes through how to set up a compartment model in R. I would have to research the packages that could be used and find a data set in order to provide an example of how to set up the model. Potentially, I could simulate a data set, but more research would be needed to figure out what data would need to be simulated.\nA compartment model would use the following differential equations that model the SEIR (susceptible, exposed, infectious, recovered) framework.\n\\[\\frac{dS(t)}{dt}=-\\beta\\frac{S(t)I(t)}{N},\\] \\[\\frac{dI(t)}{dt}=\\beta\\frac{S(t)I(t)}{N}-\\sigma E(t),\\] \\[\\frac{dI(t)}{dt}=\\sigma E(t)-\\gamma I(t),\\] \\[\\frac{dR(t)}{dt}=\\gamma I(t),\\]\nOne interesting topic that I could consider is using COVID-19 data as one of the referenced articles used SAPHIRE, a different compartmental model, to simulate the spread of COVID-19 in Wuhan, Singapore. The data was made available in the article found here. Their code for their model is found here as well, only needing modifications to fit the simpler SEIR framework.\n\n\n\n\n\n\nNoteComments/suggestions\n\n\n\nI suggest also considering the visualization of compartment models - there may be some cool packages for that since COVID. Lots of people with too much time at home and nothing to do but make R packages.",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>A</span>  <span class='chapter-title'>Infectious Disease Modeling using Compartment Models in R</span>"
@@ -91,7 +91,7 @@
     "href": "needs.html#what-does-someone-trying-to-accomplish-your-chosen-task-need-help-with",
     "title": "Appendix B — Needs Assessment",
     "section": "",
-    "text": "data cleaning\nfinding a good source for data\n\nwill demonstrate with data from Canada, but the data from other countries in covid19,analytics may not take the same form",
+    "text": "data cleaning\nfinding a good source for data\n\nwill demonstrate with data from Canada, but the data from other countries in covid19,analytics may not take the same form\n\n\n\n\n\n\n\n\nNote\n\n\n\nWait, no chance they need help with forecasting? How can that go wrong?",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>B</span>  <span class='chapter-title'>Needs Assessment</span>"
@@ -117,6 +117,117 @@
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>B</span>  <span class='chapter-title'>Needs Assessment</span>"
+    ]
+  },
+  {
+    "objectID": "guide.html#install-the-following-packages",
+    "href": "guide.html#install-the-following-packages",
+    "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
+    "section": "1.2 2. Install the following packages:",
+    "text": "1.2 2. Install the following packages:\n\ncovid19.analytics\ndplyr\nlubridate\nggplot2\nforecast\nreadr\nskimr\nprophet\n\nTo install packages, use the function install.packages() with the package name in quotation marks. Be sure to comment out this code afterwards so it doesn’t repeatedly install the code if you run all of the code at once.\n\nchange the date format using lubridate\ncreate a new column in the data set from previous ones\nforecast new data\nplot both on the same graph\ncompare forecasting between prophet and forecast",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "task-analysis.html#what-questions-should-the-user-ask-of-the-first-draft-of-the-product-what-adjustments-may-need-to-be-made",
+    "href": "task-analysis.html#what-questions-should-the-user-ask-of-the-first-draft-of-the-product-what-adjustments-may-need-to-be-made",
+    "title": "Appendix C — Task Analysis",
+    "section": "C.5 What questions should the user ask of the “first draft” of the product? What adjustments may need to be made?",
+    "text": "C.5 What questions should the user ask of the “first draft” of the product? What adjustments may need to be made?",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Task Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "guide.html#install-and-load-packages",
+    "href": "guide.html#install-and-load-packages",
+    "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
+    "section": "1.2 2. Install and Load Packages",
+    "text": "1.2 2. Install and Load Packages\nInstall the following packages1 if you have not already:\n\ncovid19.analytics\n\nfor the purposes of this guide, this package will be used to access various data sets about COVID-19\n\ndplyr\n\ndplyr is a R standard for creating data pipelines and transforming data frames to fit the desired format\n\nlubridate\n\ndates often require special packages for processing, such as noting the different possible forms that dates can come in (mm/dd/yyyy, yy/mm/dd, etc.). This belongs under the package tidyverse\n\nggplot2\n\npopular package for data visualization. For exploration of other uses of ggplot2, visit this cheat sheet, also included in tidyverse\n\nforecast\n\npackage that brings simple forecasting ability\n\nreadr\n\nalso belonging underneath tidyverse, readr allows for easier manipulation of data frames\n\nskimr\n\npackage used to skim data frames for basic data exploration and suggestion of the forms of the data used. It gives summary statistics of each column in a data frame\n\nprophet\n\npackage that allows for forecasting with more complex trends such as seasonal trends\n\n\nTo install packages, use the function install.packages() with the package name in quotation marks. Be sure to comment out this code afterwards so it doesn’t repeatedly install the code if you run all of the code at once.\nIn order to use these packages in your code, add them to the library using library(). This will add them to your active session in the order of which you executed the lines of code. To see which packages have been added to the active session and their order, execute the search() function without any parameters. You can use this to validate that you have all of the packages listed above.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "guide.html#change-date-format",
+    "href": "guide.html#change-date-format",
+    "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
+    "section": "1.3 3 Change Date Format",
+    "text": "1.3 3 Change Date Format\n\ncreate a new column in the data set from previous ones\nforecast new data\nplot both on the same graph\ncompare forecasting between prophet and forecast",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "guide.html#footnotes",
+    "href": "guide.html#footnotes",
+    "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
+    "section": "",
+    "text": "Documentation for each package can be found in the CRAN at these links: covid19.analytics, dplyr, lubridate, ggplot2, forecast, readr, skimr, prophet↩︎",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "guide.html#load-in-data",
+    "href": "guide.html#load-in-data",
+    "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
+    "section": "1.3 3 Load in Data",
+    "text": "1.3 3 Load in Data\nIn the covid19.analytics package, there are a few data sets that can be loaded in and used for easy examples. This user guide will demonstrate forecasting using its Canada data, accessed through covid19.Canada.data()\n\nhead(df) provides the first 6 observations in the data frame df.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "guide.html#check-date-format",
+    "href": "guide.html#check-date-format",
+    "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
+    "section": "1.4 4 Check Date Format",
+    "text": "1.4 4 Check Date Format",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "guide.html#transform-data",
+    "href": "guide.html#transform-data",
+    "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
+    "section": "1.5 5 Transform data",
+    "text": "1.5 5 Transform data\nCreate a new column in the data set from previous ones",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "guide.html#forecast-new-data",
+    "href": "guide.html#forecast-new-data",
+    "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
+    "section": "1.6 6 Forecast New Data",
+    "text": "1.6 6 Forecast New Data",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "guide.html#plot",
+    "href": "guide.html#plot",
+    "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
+    "section": "1.7 7 Plot",
+    "text": "1.7 7 Plot\nFor comparison, plot both the forecasted and original data.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "guide.html#compare",
+    "href": "guide.html#compare",
+    "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
+    "section": "1.8 8 Compare",
+    "text": "1.8 8 Compare\nforecasting between prophet and forecast",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
     ]
   }
 ]

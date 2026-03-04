@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-02-26">
+<meta name="dcterms.date" content="2026-03-03">
 
 <title>Appendix C — Task Analysis – User Guide: Annual Review Article Topic</title>
 <style>
@@ -34,14 +34,15 @@ ul.task-list li input[type="checkbox"] {
 <link href="./needs.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-b6e6edf6cb1293d7f667c2f39c143ab5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bb1cd4028f63a369ab283e072cb7d572.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-00b5c52c946ac58638a204f20ddd1042.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-b924a79313834975f210e38c7a8d7f00.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -95,7 +96,9 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">User Guide: Annual Review Article Topic</a> 
     </div>
@@ -116,7 +119,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./guide.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">User Guide</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -168,7 +171,8 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#what-are-the-basic-requirements-for-any-data-that-the-method-is-used-on" id="toc-what-are-the-basic-requirements-for-any-data-that-the-method-is-used-on" class="nav-link" data-scroll-target="#what-are-the-basic-requirements-for-any-data-that-the-method-is-used-on"><span class="header-section-number">C.2</span> What are the basic requirements for any data that the method is used on?</a></li>
   <li><a href="#what-are-the-basic-components-of-the-task" id="toc-what-are-the-basic-components-of-the-task" class="nav-link" data-scroll-target="#what-are-the-basic-components-of-the-task"><span class="header-section-number">C.3</span> What are the basic components of the task?</a></li>
   <li><a href="#what-decisions-does-the-user-need-to-be-prepared-to-make-on-the-fly" id="toc-what-decisions-does-the-user-need-to-be-prepared-to-make-on-the-fly" class="nav-link" data-scroll-target="#what-decisions-does-the-user-need-to-be-prepared-to-make-on-the-fly"><span class="header-section-number">C.4</span> What decisions does the user need to be prepared to make on the fly?</a></li>
-  <li><a href="#additional-guidance" id="toc-additional-guidance" class="nav-link" data-scroll-target="#additional-guidance"><span class="header-section-number">C.5</span> Additional Guidance</a></li>
+  <li><a href="#what-questions-should-the-user-ask-of-the-first-draft-of-the-product-what-adjustments-may-need-to-be-made" id="toc-what-questions-should-the-user-ask-of-the-first-draft-of-the-product-what-adjustments-may-need-to-be-made" class="nav-link" data-scroll-target="#what-questions-should-the-user-ask-of-the-first-draft-of-the-product-what-adjustments-may-need-to-be-made"><span class="header-section-number">C.5</span> What questions should the user ask of the “first draft” of the product? What adjustments may need to be made?</a></li>
+  <li><a href="#additional-guidance" id="toc-additional-guidance" class="nav-link" data-scroll-target="#additional-guidance"><span class="header-section-number">C.6</span> Additional Guidance</a></li>
   </ul>
 </nav>
     </div>
@@ -188,7 +192,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 26, 2026</p>
+      <p class="date">March 3, 2026</p>
     </div>
   </div>
   
@@ -239,11 +243,27 @@ ul.task-list li input[type="checkbox"] {
 <section id="what-decisions-does-the-user-need-to-be-prepared-to-make-on-the-fly" class="level2" data-number="C.4">
 <h2 data-number="C.4" class="anchored" data-anchor-id="what-decisions-does-the-user-need-to-be-prepared-to-make-on-the-fly"><span class="header-section-number">C.4</span> What decisions does the user need to be prepared to make on the fly?</h2>
 <ul>
-<li>They need to determine what dataset to use and how to accommodate for missing values if there are any. ## What questions should the user ask of the “first draft” of the product? What adjustments may need to be made?</li>
+<li>They need to determine what dataset to use and how to accommodate for missing values if there are any.</li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Are you planning to address this issue? If so, how?</p>
+</div>
+</div>
 </section>
-<section id="additional-guidance" class="level2" data-number="C.5">
-<h2 data-number="C.5" class="anchored" data-anchor-id="additional-guidance"><span class="header-section-number">C.5</span> Additional Guidance</h2>
+<section id="what-questions-should-the-user-ask-of-the-first-draft-of-the-product-what-adjustments-may-need-to-be-made" class="level2" data-number="C.5">
+<h2 data-number="C.5" class="anchored" data-anchor-id="what-questions-should-the-user-ask-of-the-first-draft-of-the-product-what-adjustments-may-need-to-be-made"><span class="header-section-number">C.5</span> What questions should the user ask of the “first draft” of the product? What adjustments may need to be made?</h2>
+</section>
+<section id="additional-guidance" class="level2" data-number="C.6">
+<h2 data-number="C.6" class="anchored" data-anchor-id="additional-guidance"><span class="header-section-number">C.6</span> Additional Guidance</h2>
 <p>Your check-in should answer these basic questions (and similar concerns that apply more directly to your topic).</p>
 <p>Once you’ve completed the check-in, you can use this section to jump-start an introduction/set-up/getting started section in your user guide. This document should remain as an appendix to your main report.</p>
 
@@ -302,13 +322,14 @@ ul.task-list li input[type="checkbox"] {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -663,7 +684,7 @@ ul.task-list li input[type="checkbox"] {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>Copyright 2025, Author Name</p>
+<p>Copyright 2026, Rayne Aurit</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

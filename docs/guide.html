@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-02-26">
+<meta name="dcterms.date" content="2026-03-03">
 
-<title>1&nbsp; User Guide – User Guide: Annual Review Article Topic</title>
+<title>1&nbsp; Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet – User Guide: Annual Review Article Topic</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -35,14 +35,15 @@ ul.task-list li input[type="checkbox"] {
 <link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-b6e6edf6cb1293d7f667c2f39c143ab5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bb1cd4028f63a369ab283e072cb7d572.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-00b5c52c946ac58638a204f20ddd1042.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-b924a79313834975f210e38c7a8d7f00.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -83,7 +84,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./guide.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">User Guide</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./guide.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -96,7 +97,9 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">User Guide: Annual Review Article Topic</a> 
     </div>
@@ -117,7 +120,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./guide.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">User Guide</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -160,15 +163,28 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#open-rstudio" id="toc-open-rstudio" class="nav-link active" data-scroll-target="#open-rstudio"><span class="header-section-number">1.1</span> 1. Open RStudio</a></li>
+  <li><a href="#install-and-load-packages" id="toc-install-and-load-packages" class="nav-link" data-scroll-target="#install-and-load-packages"><span class="header-section-number">1.2</span> 2. Install and Load Packages</a></li>
+  <li><a href="#load-in-data" id="toc-load-in-data" class="nav-link" data-scroll-target="#load-in-data"><span class="header-section-number">1.3</span> 3 Load in Data</a></li>
+  <li><a href="#check-date-format" id="toc-check-date-format" class="nav-link" data-scroll-target="#check-date-format"><span class="header-section-number">1.4</span> 4 Check Date Format</a></li>
+  <li><a href="#transform-data" id="toc-transform-data" class="nav-link" data-scroll-target="#transform-data"><span class="header-section-number">1.5</span> 5 Transform data</a></li>
+  <li><a href="#forecast-new-data" id="toc-forecast-new-data" class="nav-link" data-scroll-target="#forecast-new-data"><span class="header-section-number">1.6</span> 6 Forecast New Data</a></li>
+  <li><a href="#plot" id="toc-plot" class="nav-link" data-scroll-target="#plot"><span class="header-section-number">1.7</span> 7 Plot</a></li>
+  <li><a href="#compare" id="toc-compare" class="nav-link" data-scroll-target="#compare"><span class="header-section-number">1.8</span> 8 Compare</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">User Guide</span></h1>
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span></h1>
 </div>
 
 
@@ -179,7 +195,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 26, 2026</p>
+      <p class="date">March 3, 2026</p>
     </div>
   </div>
   
@@ -191,10 +207,85 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>First off, you should change this section title to something more appropriate.</p>
-<p>Next, well, that’s up to you. Good luck!</p>
+<p>This user guide will demonstrate how to attain data from COVID-19 using the <code>covid19.analytics</code></p>
+<section id="open-rstudio" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="open-rstudio"><span class="header-section-number">1.1</span> 1. Open RStudio</h2>
+<p>If you have not yet installed RStudio or would like to update your version of RStudio, visit the following link: <a href="https://posit.co/downloads/">https://posit.co/downloads/</a>. Create a new R script.</p>
+<p><img src="rScript.png" class="img-fluid"></p>
+</section>
+<section id="install-and-load-packages" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="install-and-load-packages"><span class="header-section-number">1.2</span> 2. Install and Load Packages</h2>
+<p>Install the following packages<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> if you have not already:</p>
+<ul>
+<li><code>covid19.analytics</code>
+<ul>
+<li>for the purposes of this guide, this package will be used to access various data sets about COVID-19</li>
+</ul></li>
+<li><code>dplyr</code>
+<ul>
+<li>dplyr is a R standard for creating data pipelines and transforming data frames to fit the desired format</li>
+</ul></li>
+<li><code>lubridate</code>
+<ul>
+<li>dates often require special packages for processing, such as noting the different possible forms that dates can come in (mm/dd/yyyy, yy/mm/dd, etc.). This belongs under the package <code>tidyverse</code></li>
+</ul></li>
+<li><code>ggplot2</code>
+<ul>
+<li>popular package for data visualization. For exploration of other uses of <code>ggplot2</code>, visit this <a href="https://rstudio.github.io/cheatsheets/data-visualization.pdf">cheat sheet</a>, also included in <code>tidyverse</code></li>
+</ul></li>
+<li><code>forecast</code>
+<ul>
+<li>package that brings simple forecasting ability</li>
+</ul></li>
+<li><code>readr</code>
+<ul>
+<li>also belonging underneath <code>tidyverse</code>, <code>readr</code> allows for easier manipulation of data frames</li>
+</ul></li>
+<li><code>skimr</code>
+<ul>
+<li>package used to skim data frames for basic data exploration and suggestion of the forms of the data used. It gives summary statistics of each column in a data frame</li>
+</ul></li>
+<li><code>prophet</code>
+<ul>
+<li>package that allows for forecasting with more complex trends such as seasonal trends</li>
+</ul></li>
+</ul>
+<p>To install packages, use the function <code>install.packages()</code> with the package name in quotation marks. Be sure to comment out this code afterwards so it doesn’t repeatedly install the code if you run all of the code at once.</p>
+<p>In order to use these packages in your code, add them to the library using <code>library()</code>. This will add them to your active session in the order of which you executed the lines of code. To see which packages have been added to the active session and their order, execute the <code>search()</code> function without any parameters. You can use this to validate that you have all of the packages listed above.</p>
+<p><img src="searchResult.png" class="img-fluid"></p>
+</section>
+<section id="load-in-data" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="load-in-data"><span class="header-section-number">1.3</span> 3 Load in Data</h2>
+<p>In the <code>covid19.analytics</code> package, there are a few data sets that can be loaded in and used for easy examples. This user guide will demonstrate forecasting using its Canada data, accessed through <code>covid19.Canada.data()</code></p>
+<p><img src="loadData.png" class="img-fluid"></p>
+<p><code>head(df)</code> provides the first 6 observations in the data frame <code>df</code>.</p>
+</section>
+<section id="check-date-format" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="check-date-format"><span class="header-section-number">1.4</span> 4 Check Date Format</h2>
+</section>
+<section id="transform-data" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="transform-data"><span class="header-section-number">1.5</span> 5 Transform data</h2>
+<p>Create a new column in the data set from previous ones</p>
+</section>
+<section id="forecast-new-data" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="forecast-new-data"><span class="header-section-number">1.6</span> 6 Forecast New Data</h2>
+</section>
+<section id="plot" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="plot"><span class="header-section-number">1.7</span> 7 Plot</h2>
+<p>For comparison, plot both the forecasted and original data.</p>
+</section>
+<section id="compare" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="compare"><span class="header-section-number">1.8</span> 8 Compare</h2>
+<p>forecasting between <code>prophet</code> and <code>forecast</code></p>
 
 
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Documentation for each package can be found in the CRAN at these links: <a href="https://cran.r-project.org/web/packages/covid19.analytics/readme/README.html">covid19.analytics</a>, <a href="https://cran.r-project.org/web/packages/dplyr/readme/README.html">dplyr</a>, <a href="https://rstudio.github.io/cheatsheets/html/lubridate.html">lubridate</a>, <a href="https://ggplot2.tidyverse.org/">ggplot2</a>, <a href="https://www.rdocumentation.org/packages/forecast/versions/9.0.1">forecast</a>, <a href="https://cran.r-project.org/web/packages/readr/readme/README.html">readr</a>, <a href="">skimr</a>, <a href="">prophet</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -248,13 +339,14 @@ ul.task-list li input[type="checkbox"] {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -612,7 +704,7 @@ ul.task-list li input[type="checkbox"] {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>Copyright 2025, Author Name</p>
+<p>Copyright 2026, Rayne Aurit</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

@@ -13,7 +13,7 @@ book:
   page-footer:
     left: "Copyright 2026, Rayne Aurit"
   chapters:
-    #- index.qmd # Remove this before you submit your final report!
+    - index.qmd # Remove this before you submit your final report!
     - guide.qmd
     - references.qmd
   appendices:
