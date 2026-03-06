@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-03-03">
+<meta name="dcterms.date" content="2026-03-05">
 
 <title>1&nbsp; Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet – User Guide: Annual Review Article Topic</title>
 <style>
@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -44,6 +79,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-b924a79313834975f210e38c7a8d7f00.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -168,14 +206,21 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#open-rstudio" id="toc-open-rstudio" class="nav-link active" data-scroll-target="#open-rstudio"><span class="header-section-number">1.1</span> 1. Open RStudio</a></li>
-  <li><a href="#install-and-load-packages" id="toc-install-and-load-packages" class="nav-link" data-scroll-target="#install-and-load-packages"><span class="header-section-number">1.2</span> 2. Install and Load Packages</a></li>
-  <li><a href="#load-in-data" id="toc-load-in-data" class="nav-link" data-scroll-target="#load-in-data"><span class="header-section-number">1.3</span> 3 Load in Data</a></li>
-  <li><a href="#check-date-format" id="toc-check-date-format" class="nav-link" data-scroll-target="#check-date-format"><span class="header-section-number">1.4</span> 4 Check Date Format</a></li>
-  <li><a href="#transform-data" id="toc-transform-data" class="nav-link" data-scroll-target="#transform-data"><span class="header-section-number">1.5</span> 5 Transform data</a></li>
-  <li><a href="#forecast-new-data" id="toc-forecast-new-data" class="nav-link" data-scroll-target="#forecast-new-data"><span class="header-section-number">1.6</span> 6 Forecast New Data</a></li>
-  <li><a href="#plot" id="toc-plot" class="nav-link" data-scroll-target="#plot"><span class="header-section-number">1.7</span> 7 Plot</a></li>
-  <li><a href="#compare" id="toc-compare" class="nav-link" data-scroll-target="#compare"><span class="header-section-number">1.8</span> 8 Compare</a></li>
+  <li><a href="#open-rstudio" id="toc-open-rstudio" class="nav-link active" data-scroll-target="#open-rstudio"><span class="header-section-number">1.1</span> Open RStudio</a></li>
+  <li><a href="#install-and-load-packages" id="toc-install-and-load-packages" class="nav-link" data-scroll-target="#install-and-load-packages"><span class="header-section-number">1.2</span> Install and Load Packages</a></li>
+  <li><a href="#load-in-data" id="toc-load-in-data" class="nav-link" data-scroll-target="#load-in-data"><span class="header-section-number">1.3</span> Load in Data</a></li>
+  <li><a href="#check-date-format" id="toc-check-date-format" class="nav-link" data-scroll-target="#check-date-format"><span class="header-section-number">1.4</span> Check Date Format</a></li>
+  <li><a href="#clean-data" id="toc-clean-data" class="nav-link" data-scroll-target="#clean-data"><span class="header-section-number">1.5</span> Clean data</a>
+  <ul class="collapse">
+  <li><a href="#optional-skim-again" id="toc-optional-skim-again" class="nav-link" data-scroll-target="#optional-skim-again"><span class="header-section-number">1.5.1</span> Optional: Skim Again</a></li>
+  </ul></li>
+  <li><a href="#forecast-new-data" id="toc-forecast-new-data" class="nav-link" data-scroll-target="#forecast-new-data"><span class="header-section-number">1.6</span> Forecast New Data</a>
+  <ul class="collapse">
+  <li><a href="#r-package-forecast" id="toc-r-package-forecast" class="nav-link" data-scroll-target="#r-package-forecast"><span class="header-section-number">1.6.1</span> R Package <code>forecast</code></a></li>
+  <li><a href="#r-package-prophet" id="toc-r-package-prophet" class="nav-link" data-scroll-target="#r-package-prophet"><span class="header-section-number">1.6.2</span> R Package <code>prophet</code></a></li>
+  </ul></li>
+  <li><a href="#plot" id="toc-plot" class="nav-link" data-scroll-target="#plot"><span class="header-section-number">1.7</span> Plot</a></li>
+  <li><a href="#compare" id="toc-compare" class="nav-link" data-scroll-target="#compare"><span class="header-section-number">1.8</span> Compare</a></li>
   </ul>
 </nav>
     </div>
@@ -195,7 +240,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">March 3, 2026</p>
+      <p class="date">March 5, 2026</p>
     </div>
   </div>
   
@@ -209,12 +254,12 @@ ul.task-list li input[type="checkbox"] {
 
 <p>This user guide will demonstrate how to attain data from COVID-19 using the <code>covid19.analytics</code></p>
 <section id="open-rstudio" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="open-rstudio"><span class="header-section-number">1.1</span> 1. Open RStudio</h2>
+<h2 data-number="1.1" class="anchored" data-anchor-id="open-rstudio"><span class="header-section-number">1.1</span> Open RStudio</h2>
 <p>If you have not yet installed RStudio or would like to update your version of RStudio, visit the following link: <a href="https://posit.co/downloads/">https://posit.co/downloads/</a>. Create a new R script.</p>
 <p><img src="rScript.png" class="img-fluid"></p>
 </section>
 <section id="install-and-load-packages" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="install-and-load-packages"><span class="header-section-number">1.2</span> 2. Install and Load Packages</h2>
+<h2 data-number="1.2" class="anchored" data-anchor-id="install-and-load-packages"><span class="header-section-number">1.2</span> Install and Load Packages</h2>
 <p>Install the following packages<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> if you have not already:</p>
 <ul>
 <li><code>covid19.analytics</code>
@@ -250,33 +295,151 @@ ul.task-list li input[type="checkbox"] {
 <li>package that allows for forecasting with more complex trends such as seasonal trends</li>
 </ul></li>
 </ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(covid19.analytics)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(prophet)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <p>To install packages, use the function <code>install.packages()</code> with the package name in quotation marks. Be sure to comment out this code afterwards so it doesn’t repeatedly install the code if you run all of the code at once.</p>
-<p>In order to use these packages in your code, add them to the library using <code>library()</code>. This will add them to your active session in the order of which you executed the lines of code. To see which packages have been added to the active session and their order, execute the <code>search()</code> function without any parameters. You can use this to validate that you have all of the packages listed above.</p>
-<p><img src="searchResult.png" class="img-fluid"></p>
+<p>For a quick temperature check on which packages have been added to the active session and their order, execute the <code>search()</code> function without any parameters. You can use this to validate that you have all of the packages listed above.</p>
+<pre><code> [1] ".GlobalEnv"                "package:prophet"           "package:rlang"            
+ [4] "package:Rcpp"              "package:skimr"             "package:readr"            
+ [7] "package:forecast"          "package:ggplot2"           "package:lubridate"        
+[10] "package:dplyr"             "package:covid19.analytics" "tools:rstudio"            
+[13] "package:stats"             "package:graphics"          "package:grDevices"        
+[16] "package:utils"             "package:datasets"          "package:methods"          
+[19] "Autoloads"                 "package:base"</code></pre>
 </section>
 <section id="load-in-data" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="load-in-data"><span class="header-section-number">1.3</span> 3 Load in Data</h2>
-<p>In the <code>covid19.analytics</code> package, there are a few data sets that can be loaded in and used for easy examples. This user guide will demonstrate forecasting using its Canada data, accessed through <code>covid19.Canada.data()</code></p>
-<p><img src="loadData.png" class="img-fluid"></p>
-<p><code>head(df)</code> provides the first 6 observations in the data frame <code>df</code>.</p>
+<h2 data-number="1.3" class="anchored" data-anchor-id="load-in-data"><span class="header-section-number">1.3</span> Load in Data</h2>
+<p>In the <code>covid19.analytics</code> package, there are a few data sets that can be loaded in and used for easy examples. This user guide will demonstrate forecasting using its Canada data, accessed through <code>covid19.Canada.data()</code>. If you plan to use a different data set, make sure that the data include a time variable.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="fu">covid19.Canada.data</span>())</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>skim(df)</code> goes variable by variable in <code>df</code> and displays the summary statistics depending on the type of variable used. While each variable will show its completeness, a numeric variable will show the mean, standard deviation, and percentile values</p>
 </section>
 <section id="check-date-format" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="check-date-format"><span class="header-section-number">1.4</span> 4 Check Date Format</h2>
+<h2 data-number="1.4" class="anchored" data-anchor-id="check-date-format"><span class="header-section-number">1.4</span> Check Date Format</h2>
+<p>In the package <code>lubridate</code>,</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">dmy</span>(df<span class="sc">$</span>date)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
-<section id="transform-data" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="transform-data"><span class="header-section-number">1.5</span> 5 Transform data</h2>
+<section id="clean-data" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="clean-data"><span class="header-section-number">1.5</span> Clean data</h2>
 <p>Create a new column in the data set from previous ones</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ontario_df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(prname <span class="sc">==</span> <span class="st">"Ontario"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(date) <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">totalcases =</span> <span class="fu">parse_number</span>(totalcases, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">"-"</span>, <span class="st">""</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(totalcases)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">new_cases =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fu">diff</span>(totalcases))) <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(new_cases))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="optional-skim-again" class="level3" data-number="1.5.1">
+<h3 data-number="1.5.1" class="anchored" data-anchor-id="optional-skim-again"><span class="header-section-number">1.5.1</span> Optional: Skim Again</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(ontario_df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
 </section>
 <section id="forecast-new-data" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="forecast-new-data"><span class="header-section-number">1.6</span> 6 Forecast New Data</h2>
+<h2 data-number="1.6" class="anchored" data-anchor-id="forecast-new-data"><span class="header-section-number">1.6</span> Forecast New Data</h2>
+<section id="r-package-forecast" class="level3" data-number="1.6.1">
+<h3 data-number="1.6.1" class="anchored" data-anchor-id="r-package-forecast"><span class="header-section-number">1.6.1</span> R Package <code>forecast</code></h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ts_cases <span class="ot">&lt;-</span> <span class="fu">ts</span>(ontario_df<span class="sc">$</span>new_cases, <span class="at">frequency =</span> <span class="dv">52</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ontario_df<span class="sc">$</span>new_cases)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(ontario_df<span class="sc">$</span>new_cases)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(ts_cases)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>forecast_8 <span class="ot">&lt;-</span> <span class="fu">forecast</span>(fit, <span class="at">h =</span> <span class="dv">52</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>forecast_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(forecast_8)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="r-package-prophet" class="level3" data-number="1.6.2">
+<h3 data-number="1.6.2" class="anchored" data-anchor-id="r-package-prophet"><span class="header-section-number">1.6.2</span> R Package <code>prophet</code></h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>prophet_df <span class="ot">&lt;-</span> ontario_df <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">ds =</span> date, <span class="at">y =</span> new_cases)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">prophet</span>(prophet_df, <span class="at">yearly.seasonality =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>future <span class="ot">&lt;-</span> <span class="fu">make_future_dataframe</span>(m, <span class="at">periods =</span> <span class="dv">52</span>, <span class="at">freq =</span> <span class="st">"week"</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>forecast_p <span class="ot">&lt;-</span> <span class="fu">predict</span>(m, future)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>forecast_p_df <span class="ot">&lt;-</span> forecast_p <span class="sc">%&gt;%</span> <span class="fu">select</span>(ds, yhat, yhat_lower, yhat_upper)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
 </section>
 <section id="plot" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="plot"><span class="header-section-number">1.7</span> 7 Plot</h2>
+<h2 data-number="1.7" class="anchored" data-anchor-id="plot"><span class="header-section-number">1.7</span> Plot</h2>
 <p>For comparison, plot both the forecasted and original data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> ontario_df,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> new_cases),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> forecast_df,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="fu">max</span>(ontario_df<span class="sc">$</span>date) <span class="sc">+</span> <span class="dv">7</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">by =</span> <span class="st">"week"</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">length.out =</span> <span class="dv">52</span>),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> Point.Forecast),</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Ontario Weekly COVID Cases Forecast"</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"New Cases"</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Date"</span>) <span class="sc">+</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> forecast_p_df,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">x =</span> ds, <span class="at">ymin =</span> yhat_lower, <span class="at">ymax =</span> yhat_upper),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill =</span> <span class="st">"lightblue"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> ontario_df,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> new_cases),</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> forecast_p_df,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> ds, <span class="at">y =</span> yhat),</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Ontario Weekly COVID Cases Forecast (Prophet)"</span>,</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Date"</span>, <span class="at">y =</span> <span class="st">"New Cases"</span>) <span class="sc">+</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
 <section id="compare" class="level2" data-number="1.8">
-<h2 data-number="1.8" class="anchored" data-anchor-id="compare"><span class="header-section-number">1.8</span> 8 Compare</h2>
-<p>forecasting between <code>prophet</code> and <code>forecast</code></p>
+<h2 data-number="1.8" class="anchored" data-anchor-id="compare"><span class="header-section-number">1.8</span> Compare</h2>
+<p>forecasting between <code>forecast</code> and <code>prophet</code></p>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="forecast.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Forecasted plot using forecast"><img src="forecast.png" class="img-fluid figure-img" alt="Forecasted plot using forecast"></a></p>
+<figcaption>Forecasted plot using <code>forecast</code></figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="prophet.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Forecasted plot using prophet"><img src="prophet.png" class="img-fluid figure-img" alt="Forecasted plot using prophet"></a></p>
+<figcaption>Forecasted plot using <code>prophet</code></figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
 
 
 </section>
@@ -714,6 +877,38 @@ ul.task-list li input[type="checkbox"] {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
