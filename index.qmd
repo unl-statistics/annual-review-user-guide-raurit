@@ -31,13 +31,13 @@ Install the following packages[^1] if you have not already:
   - `ggplot2`
     - popular package for data visualization. For exploration of other uses of `ggplot2`, visit this [cheat sheet](https://rstudio.github.io/cheatsheets/data-visualization.pdf), also included in `tidyverse`
   - `forecast`
-    - package that brings simple forecasting ability
+    - package that brings forecasting ability
   - `readr`
     - also belonging underneath `tidyverse`, `readr` allows for easier manipulation of data frames
   - `skimr`
     - package used to skim data frames for basic data exploration and suggestion of the forms of the data used. It gives summary statistics of each column in a data frame
   - `prophet`
-    - package that allows for forecasting created by facebook
+    - package that allows for robust additive forecasting, created by Facebook
   - `tseries`
     - package which will be used for checking assumptions for time series data
     
@@ -55,7 +55,7 @@ library(prophet)
 library(tseries)
 ```
 
-For a quick temperature check on which packages have been added to the active session and their order, execute the `search()` function without any parameters. You can use this to validate that you have all of the packages listed above.
+For a quick temperature check on which packages have been added to the active session and their order, execute the `search()` function without any parameters. You can use this to validate that you have all of the packages listed above. The output below is of this exact book and may not reflect the packages in your active session.
 
 ```
  [1] ".GlobalEnv"                "package:tseries"          
@@ -84,7 +84,7 @@ In the `covid19.analytics` package, there are a few data sets that can be loaded
   - The number of total cases of COVID-19
   - type: character
 - `date`
-  - The date that the observations were taken
+  - The date of the beginning of each week, with each observation including data accumulated over the week prior
   - type: character
   
 ::: callout-note

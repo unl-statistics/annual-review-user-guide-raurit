@@ -360,7 +360,7 @@ window.Quarto = {
 </ul></li>
 <li><code>forecast</code>
 <ul>
-<li>package that brings simple forecasting ability</li>
+<li>package that brings forecasting ability</li>
 </ul></li>
 <li><code>readr</code>
 <ul>
@@ -372,7 +372,7 @@ window.Quarto = {
 </ul></li>
 <li><code>prophet</code>
 <ul>
-<li>package that allows for forecasting created by facebook</li>
+<li>package that allows for robust additive forecasting, created by Facebook</li>
 </ul></li>
 <li><code>tseries</code>
 <ul>
@@ -390,7 +390,7 @@ window.Quarto = {
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(prophet)</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tseries)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>For a quick temperature check on which packages have been added to the active session and their order, execute the <code>search()</code> function without any parameters. You can use this to validate that you have all of the packages listed above.</p>
+<p>For a quick temperature check on which packages have been added to the active session and their order, execute the <code>search()</code> function without any parameters. You can use this to validate that you have all of the packages listed above. The output below is of this exact book and may not reflect the packages in your active session.</p>
 <pre><code> [1] ".GlobalEnv"                "package:tseries"          
  [3] "package:prophet"           "package:rlang"            
  [5] "package:Rcpp"              "package:skimr"            
@@ -420,7 +420,7 @@ window.Quarto = {
 </ul></li>
 <li><code>date</code>
 <ul>
-<li>The date that the observations were taken</li>
+<li>The date of the beginning of each week, with each observation including data accumulated over the week prior</li>
 <li>type: character</li>
 </ul></li>
 </ul>
