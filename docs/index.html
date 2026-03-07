@@ -9,7 +9,7 @@
 <meta name="author" content="Rayne Aurit">
 <meta name="dcterms.date" content="2026-03-07">
 
-<title>User Guide: Annual Review Article Topic</title>
+<title>User Guide: Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -171,7 +171,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Forecasting Demonstration using COVID-19 Data</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -188,7 +188,7 @@ window.Quarto = {
       <a href="./index.html" class="sidebar-logo-link">
       </a>
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">User Guide: Annual Review Article Topic</a> 
+      <a href="./">User Guide: Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -201,7 +201,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Forecasting Demonstration using COVID-19 Data</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -249,7 +249,7 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#forecasting-with-covid-19-data-using-r-packages-covid19.analytics-forecast-and-prophet" id="toc-forecasting-with-covid-19-data-using-r-packages-covid19.analytics-forecast-and-prophet" class="nav-link active" data-scroll-target="#forecasting-with-covid-19-data-using-r-packages-covid19.analytics-forecast-and-prophet"><span class="header-section-number">1</span> Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</a>
+  <li><a href="#forecasting-demonstration-using-covid-19-data" id="toc-forecasting-demonstration-using-covid-19-data" class="nav-link active" data-scroll-target="#forecasting-demonstration-using-covid-19-data"><span class="header-section-number">1</span> Forecasting Demonstration using COVID-19 Data</a>
   <ul class="collapse">
   <li><a href="#open-rstudio" id="toc-open-rstudio" class="nav-link" data-scroll-target="#open-rstudio"><span class="header-section-number">1.1</span> Open RStudio</a></li>
   <li><a href="#install-and-load-packages" id="toc-install-and-load-packages" class="nav-link" data-scroll-target="#install-and-load-packages"><span class="header-section-number">1.2</span> Install and Load Packages</a></li>
@@ -287,7 +287,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">User Guide: Annual Review Article Topic</h1>
+<h1 class="title">User Guide: Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</h1>
 </div>
 
 
@@ -316,8 +316,8 @@ window.Quarto = {
 </header>
 
 
-<section id="forecasting-with-covid-19-data-using-r-packages-covid19.analytics-forecast-and-prophet" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</h1>
+<section id="forecasting-demonstration-using-covid-19-data" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Forecasting Demonstration using COVID-19 Data</h1>
 <p>This user guide will demonstrate how to attain data from COVID-19 using the <code>covid19.analytics</code> package and 2 methods of forecasting with the <code>forecast</code> package (using ARIMA) and the <code>prophet</code> package, a procedure used for forecasting created by Facebook. Before applying the concepts of time-series forecasting, here are a few notes and definitions to help in comprehending later steps in this guide:</p>
 <ol type="1">
 <li>In practicality, “forecasting” and “prediction” are used interchangeably. Forecasting is prediction but with an emphasis on time-series data.</li>
@@ -415,7 +415,7 @@ window.Quarto = {
 </ul></li>
 <li><code>totalcases</code>
 <ul>
-<li>The number of total cases of Covid-19</li>
+<li>The number of total cases of COVID-19</li>
 <li>type: character</li>
 </ul></li>
 <li><code>date</code>
@@ -442,7 +442,7 @@ Note
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p><code>skim(df)</code> goes variable by variable in <code>df</code> and displays the summary statistics depending on the type of variable used. While each variable will show its completeness, a numeric variable will show the mean, standard deviation, and percentile values and a character variable will display the minimum number of characters in the string, the maximum number of characters, the number of unique strings, and a few other features. In the date column of the Canada Covid-19 data frame, there are 0 in <code>n_missing</code>, and the <code>min</code> and <code>max</code> values are both at 10. This would indicate that each row has a value for date and it follows some variation of “dd/mm/yyyy” given each has 10 characters. See the next section on what to do in case the format does not match.</p>
+<p><code>skim(df)</code> goes variable by variable in <code>df</code> and displays the summary statistics depending on the type of variable used. While each variable will show its completeness, a numeric variable will show the mean, standard deviation, and percentile values and a character variable will display the minimum number of characters in the string, the maximum number of characters, the number of unique strings, and a few other features. In the date column of the Canada COVID-19 data frame, there are 0 in <code>n_missing</code>, and the <code>min</code> and <code>max</code> values are both at 10. This would indicate that each row has a value for date and it follows some variation of “dd/mm/yyyy” given each has 10 characters. See the next section on what to do in case the format does not match.</p>
 <p>If there is missingness in the data, visit this short <a href="https://www.geeksforgeeks.org/data-science/handling-missing-values-in-time-series-data/">guide</a> with various options.</p>
 </section>
 <section id="cleaning-the-data" class="level2" data-number="1.4">
@@ -534,7 +534,7 @@ alternative hypothesis: stationary</code></pre>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>d<span class="ot">&lt;-</span><span class="fu">decompose</span>(ts_cases, <span class="st">"additive"</span>)</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Looking at these plots, shown in Figures 1 and 2, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the Covid-19 data on Ontario, Canada, we can see that there is a lot of randomness with a consistent spike around the halfway mark when a new strain of Covid-19 caused an influx of cases. Revisit the differences between additive and multiplicative components as described at the top of the guide.</p>
+<p>Looking at these plots, shown in Figures 1 and 2, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the COVID-19 data on Ontario, Canada, we can see that there is a lot of randomness with a consistent spike around the halfway mark when a new strain of COVID-19 caused an influx of cases. Revisit the differences between additive and multiplicative components as described at the top of the guide.</p>
 <div class="quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
@@ -648,8 +648,8 @@ alternative hypothesis: stationary</code></pre>
 <h2 data-number="1.8" class="anchored" data-anchor-id="compare"><span class="header-section-number">1.8</span> Compare</h2>
 <section id="demonstration" class="level3" data-number="1.8.1">
 <h3 data-number="1.8.1" class="anchored" data-anchor-id="demonstration"><span class="header-section-number">1.8.1</span> Demonstration</h3>
-<p>These two plots are examples of ones generated using <code>forecast</code> then <code>prophet</code>. The largest difference that we can see is the way that each handles new predictions. Figure 4 using <code>prophet</code> overlays predictions on top of the current data whereas <code>forecast</code> exclusively predicts beyond the current data. This can be manually changed by editing the limits on time for prediction when plotting. In both, the confidence bands in blue showcase that the direction is not conclusive. This could be due to the fact that there are multiple strands of Covid-19 with different transmission rates that have appeared over time, adding more noise to the forecast. Additionally, there are less tests for Covid-19 as vaccines became more widely spread and it was seen as less of a threat as when it first was deemed a global pandemic. Many other external factors could contribute to the near erasure of high inflections in new cases.</p>
-<p>Examining <code>forecast</code> more, the plot is more realistic simply because the point prediction does not go below zero. The previous trends in seasonality in <code>prophet</code> seems to be forced onto the new data, showing that there is going to be negative new cases, which is impossible since the measure of new cases does not take into account active cases. When someone tests positive for Covid-19, they are added to the new cases, but are not checked up on and removed from the count afterwards.</p>
+<p>These two plots are examples of ones generated using <code>forecast</code> then <code>prophet</code>. The largest difference that we can see is the way that each handles new predictions. Figure 4 using <code>prophet</code> overlays predictions on top of the current data whereas <code>forecast</code> exclusively predicts beyond the current data. This can be manually changed by editing the limits on time for prediction when plotting. In both, the confidence bands in blue showcase that the direction is not conclusive. This could be due to the fact that there are multiple strands of COVID-19 with different transmission rates that have appeared over time, adding more noise to the forecast. Additionally, there are less tests for COVID-19 as vaccines became more widely spread and it was seen as less of a threat as when it first was deemed a global pandemic. Many other external factors could contribute to the near erasure of high inflections in new cases.</p>
+<p>Examining <code>forecast</code> more, the plot is more realistic simply because the point prediction does not go below zero. The previous trends in seasonality in <code>prophet</code> seems to be forced onto the new data, showing that there is going to be negative new cases, which is impossible since the measure of new cases does not take into account active cases. When someone tests positive for COVID-19, they are added to the new cases, but are not checked up on and removed from the count afterwards.</p>
 <div class="quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">

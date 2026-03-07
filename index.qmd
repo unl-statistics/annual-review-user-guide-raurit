@@ -1,4 +1,4 @@
-# Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet
+# Forecasting Demonstration using COVID-19 Data
 
 This user guide will demonstrate how to attain data from COVID-19 using the `covid19.analytics` package and 2 methods of forecasting with the `forecast` package (using ARIMA) and the `prophet` package, a procedure used for forecasting created by Facebook. Before applying the concepts of time-series forecasting, here are a few notes and definitions to help in comprehending later steps in this guide:
 
@@ -81,7 +81,7 @@ In the `covid19.analytics` package, there are a few data sets that can be loaded
   - The name of the providence that the data is located in
   - type: character
 - `totalcases`
-  - The number of total cases of Covid-19
+  - The number of total cases of COVID-19
   - type: character
 - `date`
   - The date that the observations were taken
@@ -99,7 +99,7 @@ head(df)
 skim(df)
 ```
 
-`skim(df)` goes variable by variable in `df` and displays the summary statistics depending on the type of variable used. While each variable will show its completeness, a numeric variable will show the mean, standard deviation, and percentile values and a character variable will display the minimum number of characters in the string, the maximum number of characters, the number of unique strings, and a few other features. In the date column of the Canada Covid-19 data frame, there are 0 in `n_missing`, and the `min` and `max` values are both at 10. This would indicate that each row has a value for date and it follows some variation of "dd/mm/yyyy" given each has 10 characters. See the next section on what to do in case the format does not match.
+`skim(df)` goes variable by variable in `df` and displays the summary statistics depending on the type of variable used. While each variable will show its completeness, a numeric variable will show the mean, standard deviation, and percentile values and a character variable will display the minimum number of characters in the string, the maximum number of characters, the number of unique strings, and a few other features. In the date column of the Canada COVID-19 data frame, there are 0 in `n_missing`, and the `min` and `max` values are both at 10. This would indicate that each row has a value for date and it follows some variation of "dd/mm/yyyy" given each has 10 characters. See the next section on what to do in case the format does not match.
 
 If there is missingness in the data, visit this short [guide](https://www.geeksforgeeks.org/data-science/handling-missing-values-in-time-series-data/) with various options.
 
@@ -208,7 +208,7 @@ d<-decompose(ts_cases, "additive")
 plot(d)
 ```
 
-Looking at these plots, shown in Figures 1 and 2, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the Covid-19 data on Ontario, Canada, we can see that there is a lot of randomness with a consistent spike around the halfway mark when a new strain of Covid-19 caused an influx of cases. Revisit the differences between additive and multiplicative components as described at the top of the guide.
+Looking at these plots, shown in Figures 1 and 2, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the COVID-19 data on Ontario, Canada, we can see that there is a lot of randomness with a consistent spike around the halfway mark when a new strain of COVID-19 caused an influx of cases. Revisit the differences between additive and multiplicative components as described at the top of the guide.
 
 ::: {layout-ncol=2}
 ![Figure 1: Decomposition of `new_cases` through the raw, observed data, overall trend, seasonality, and randomness with multiplicative components](decomp.png){.lightbox}
@@ -314,9 +314,9 @@ ggplot() +
 
 ### Demonstration
 
-These two plots are examples of ones generated using `forecast` then `prophet`. The largest difference that we can see is the way that each handles new predictions. Figure 4 using `prophet` overlays predictions on top of the current data whereas `forecast` exclusively predicts beyond the current data. This can be manually changed by editing the limits on time for prediction when plotting. In both, the confidence bands in blue showcase that the direction is not conclusive. This could be due to the fact that there are multiple strands of Covid-19 with different transmission rates that have appeared over time, adding more noise to the forecast. Additionally, there are less tests for Covid-19 as vaccines became more widely spread and it was seen as less of a threat as when it first was deemed a global pandemic. Many other external factors could contribute to the near erasure of high inflections in new cases.
+These two plots are examples of ones generated using `forecast` then `prophet`. The largest difference that we can see is the way that each handles new predictions. Figure 4 using `prophet` overlays predictions on top of the current data whereas `forecast` exclusively predicts beyond the current data. This can be manually changed by editing the limits on time for prediction when plotting. In both, the confidence bands in blue showcase that the direction is not conclusive. This could be due to the fact that there are multiple strands of COVID-19 with different transmission rates that have appeared over time, adding more noise to the forecast. Additionally, there are less tests for COVID-19 as vaccines became more widely spread and it was seen as less of a threat as when it first was deemed a global pandemic. Many other external factors could contribute to the near erasure of high inflections in new cases.
 
-Examining `forecast` more, the plot is more realistic simply because the point prediction does not go below zero. The previous trends in seasonality in `prophet` seems to be forced onto the new data, showing that there is going to be negative new cases, which is impossible since the measure of new cases does not take into account active cases. When someone tests positive for Covid-19, they are added to the new cases, but are not checked up on and removed from the count afterwards.
+Examining `forecast` more, the plot is more realistic simply because the point prediction does not go below zero. The previous trends in seasonality in `prophet` seems to be forced onto the new data, showing that there is going to be negative new cases, which is impossible since the measure of new cases does not take into account active cases. When someone tests positive for COVID-19, they are added to the new cases, but are not checked up on and removed from the count afterwards.
 
 ::: {layout-ncol=2}
 ![Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using `forecast`](forecast.png){.lightbox}
