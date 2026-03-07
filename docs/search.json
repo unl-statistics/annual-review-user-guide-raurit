@@ -14,7 +14,7 @@
     "href": "guide.html#install-and-load-packages",
     "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
     "section": "1.2 Install and Load Packages",
-    "text": "1.2 Install and Load Packages\nInstall the following packages1 if you have not already:\n\ncovid19.analytics\n\nfor the purposes of this guide, this package will be used to access various data sets about COVID-19\n\ndplyr\n\ndplyr is a R standard for creating data pipelines and transforming data frames to fit the desired format\n\nlubridate\n\ndates often require special packages for processing, such as noting the different possible forms that dates can come in (mm/dd/yyyy, yy/mm/dd, etc.). This belongs under the package tidyverse\n\nggplot2\n\npopular package for data visualization. For exploration of other uses of ggplot2, visit this cheat sheet, also included in tidyverse\n\nforecast\n\npackage that brings simple forecasting ability\n\nreadr\n\nalso belonging underneath tidyverse, readr allows for easier manipulation of data frames\n\nskimr\n\npackage used to skim data frames for basic data exploration and suggestion of the forms of the data used. It gives summary statistics of each column in a data frame\n\nprophet\n\npackage that allows for forecasting with more complex trends such as seasonal trends\n\n\n\nlibrary(covid19.analytics)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(forecast)\nlibrary(readr)\nlibrary(skimr)\nlibrary(prophet)\n\nTo install packages, use the function install.packages() with the package name in quotation marks. Be sure to comment out this code afterwards so it doesn’t repeatedly install the code if you run all of the code at once.\nFor a quick temperature check on which packages have been added to the active session and their order, execute the search() function without any parameters. You can use this to validate that you have all of the packages listed above.\n [1] \".GlobalEnv\"                \"package:prophet\"           \"package:rlang\"            \n [4] \"package:Rcpp\"              \"package:skimr\"             \"package:readr\"            \n [7] \"package:forecast\"          \"package:ggplot2\"           \"package:lubridate\"        \n[10] \"package:dplyr\"             \"package:covid19.analytics\" \"tools:rstudio\"            \n[13] \"package:stats\"             \"package:graphics\"          \"package:grDevices\"        \n[16] \"package:utils\"             \"package:datasets\"          \"package:methods\"          \n[19] \"Autoloads\"                 \"package:base\"",
+    "text": "1.2 Install and Load Packages\nInstall the following packages1 if you have not already:\n\ncovid19.analytics\n\nfor the purposes of this guide, this package will be used to access various data sets about COVID-19\n\ndplyr\n\ndplyr is a R standard for creating data pipelines and transforming data frames to fit the desired format\n\nlubridate\n\ndates often require special packages for processing, such as noting the different possible forms that dates can come in (mm/dd/yyyy, yy/mm/dd, etc.). This belongs under the package tidyverse\n\nggplot2\n\npopular package for data visualization. For exploration of other uses of ggplot2, visit this cheat sheet, also included in tidyverse\n\nforecast\n\npackage that brings simple forecasting ability\n\nreadr\n\nalso belonging underneath tidyverse, readr allows for easier manipulation of data frames\n\nskimr\n\npackage used to skim data frames for basic data exploration and suggestion of the forms of the data used. It gives summary statistics of each column in a data frame\n\nprophet\n\npackage that allows for forecasting with more complex trends such as seasonal trends\n\ntseries\n\npackage which will be used for checking assumptions for time series data\n\n\nTo install packages, use the function install.packages() with the package name in quotation marks. Be sure to comment out this code afterwards so it doesn’t repeatedly install the code if you run all of the code at once.\n\nlibrary(covid19.analytics)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(forecast)\nlibrary(readr)\nlibrary(skimr)\nlibrary(prophet)\n\nFor a quick temperature check on which packages have been added to the active session and their order, execute the search() function without any parameters. You can use this to validate that you have all of the packages listed above.\n [1] \".GlobalEnv\"                \"package:prophet\"           \"package:rlang\"            \n [4] \"package:Rcpp\"              \"package:skimr\"             \"package:readr\"            \n [7] \"package:forecast\"          \"package:ggplot2\"           \"package:lubridate\"        \n[10] \"package:dplyr\"             \"package:covid19.analytics\" \"tools:rstudio\"            \n[13] \"package:stats\"             \"package:graphics\"          \"package:grDevices\"        \n[16] \"package:utils\"             \"package:datasets\"          \"package:methods\"          \n[19] \"Autoloads\"                 \"package:base\"",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
     ]
@@ -24,7 +24,7 @@
     "href": "guide.html#load-in-data",
     "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
     "section": "1.3 Load in Data",
-    "text": "1.3 Load in Data\nIn the covid19.analytics package, there are a few data sets that can be loaded in and used for easy examples. This user guide will demonstrate forecasting using its Canada data, accessed through covid19.Canada.data(). If you plan to use a different data set, make sure that the data include a time variable.\n\ndf = data.frame(covid19.Canada.data())\nhead(df)\nskim(df)\n\nskim(df) goes variable by variable in df and displays the summary statistics depending on the type of variable used. While each variable will show its completeness, a numeric variable will show the mean, standard deviation, and percentile values",
+    "text": "1.3 Load in Data\nIn the covid19.analytics package, there are a few data sets that can be loaded in and used for easy examples. This user guide will demonstrate forecasting using its Canada data, accessed through covid19.Canada.data(). If you plan to use a different data set, make sure that the data suits the form required for time series analysis.\n\ndf = data.frame(covid19.Canada.data())\nhead(df)\nskim(df)\n\nskim(df) goes variable by variable in df and displays the summary statistics depending on the type of variable used. While each variable will show its completeness, a numeric variable will show the mean, standard deviation, and percentile values and a character variable will display the minimum number of characters in the string, the maximum number of characters, the number of unique strings, and a few other features. In the date column of the Canada Covid-19 data frame, there are 0 in n_missing, and the min and max values are both at 10. This would indicate that each row has a value for date and it follows some variation of “dd/mm/yyyy” given each has 10 characters. See the next section on what to do in case this is not true.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
     ]
@@ -34,7 +34,7 @@
     "href": "guide.html#check-date-format",
     "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
     "section": "1.4 Check Date Format",
-    "text": "1.4 Check Date Format\nIn the package lubridate,\n\ndf$date &lt;- dmy(df$date)",
+    "text": "1.4 Check Date Format\nBefore being able to work with dates, you must have only one column for the date variable. If your data does not have date in one column and instead spreads out day, month, and year into multiple columns, you can use the dplyr package and the following step to combine columns:\n\ndf &lt;- df %&gt;% mutate(date=paste(year, month, day, sep = \"-\"))\n\nwhere df is the name of your data frame, date is the name of the new column that you are forming, the first three parameters of paste are the names of your existing columns of date data, and sep = \"-\" indicates that each field will be separated with a hyphen. These should be modified to fit your use case.\nNext, the package lubridate is best for working with dates in R. Once your date column properly includes the right content, it is important to ensure that they are in the correct format. For working with time-series data, it is best practice to use ymd (year-month-day) format. This format allows the data to be sorted to form chronological order.\n\ndf$date &lt;- ymd(df$date)\n\nTo explain how this format is best, let’s say dates were in the day-month-year format instead. Running a basic sort function would order by whether it is the first, second, third, etc. day of the month, then by what month it is, and then finally by year. The inverse would sort by year first, then month, then day. The end result is a list of date which are in proper chronological order.\nAdditionally, it makes more logical sense! The first item in a date sequence should be the most important, which is the year. Often, you can tell more about the context of a date given the year than the month or what day of the month it is.\n\n“Europeans get it wrong. Americans get it wrong. Only computer scientists get it right.”\n\nDr. Chris Bourke 2024, my Computing II professor, about date formats",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
     ]
@@ -53,8 +53,8 @@
     "objectID": "guide.html#forecast-new-data",
     "href": "guide.html#forecast-new-data",
     "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
-    "section": "1.6 Forecast New Data",
-    "text": "1.6 Forecast New Data\n\n1.6.1 R Package forecast\n\nts_cases &lt;- ts(ontario_df$new_cases, frequency = 52)\n\nsummary(ontario_df$new_cases)\nlength(ontario_df$new_cases)\n\nfit &lt;- auto.arima(ts_cases)\nsummary(fit)\n\nforecast_8 &lt;- forecast(fit, h = 52)\n\nforecast_df &lt;- data.frame(forecast_8)\n\n\n\n1.6.2 R Package prophet\n\nprophet_df &lt;- ontario_df %&gt;% \n  rename(ds = date, y = new_cases)\n\nm &lt;- prophet(prophet_df, yearly.seasonality = TRUE)\nfuture &lt;- make_future_dataframe(m, periods = 52, freq = \"week\")\nforecast_p &lt;- predict(m, future)\n\nforecast_p_df &lt;- forecast_p %&gt;% select(ds, yhat, yhat_lower, yhat_upper)",
+    "section": "1.7 Forecast New Data",
+    "text": "1.7 Forecast New Data\n\n1.7.1 R Package forecast\n\nts_cases &lt;- ts(ontario_df$new_cases, frequency = 52)\n\nsummary(ontario_df$new_cases)\nlength(ontario_df$new_cases)\n\nfit &lt;- auto.arima(ts_cases)\nsummary(fit)\n\nforecast_8 &lt;- forecast(fit, h = 52)\n\nforecast_df &lt;- data.frame(forecast_8)\n\n\n\n1.7.2 R Package prophet\n\nprophet_df &lt;- ontario_df %&gt;% \n  rename(ds = date, y = new_cases)\n\nm &lt;- prophet(prophet_df, yearly.seasonality = TRUE)\nfuture &lt;- make_future_dataframe(m, periods = 52, freq = \"week\")\nforecast_p &lt;- predict(m, future)\n\nforecast_p_df &lt;- forecast_p %&gt;% select(ds, yhat, yhat_lower, yhat_upper)",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
     ]
@@ -63,8 +63,8 @@
     "objectID": "guide.html#plot",
     "href": "guide.html#plot",
     "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
-    "section": "1.7 Plot",
-    "text": "1.7 Plot\nFor comparison, plot both the forecasted and original data.\n\nggplot() +\n  geom_line(data = ontario_df,\n            aes(x = date, y = new_cases),\n            color = \"black\") +\n  geom_line(data = forecast_df,\n            aes(x = seq(max(ontario_df$date) + 7,\n                        by = \"week\",\n                        length.out = 52),\n                y = Point.Forecast),\n            color = \"red\") +\n  labs(title = \"Ontario Weekly COVID Cases Forecast\",\n       y = \"New Cases\",\n       x = \"Date\") +\n  theme_minimal()\n\n\nggplot() +\n  geom_ribbon(data = forecast_p_df,\n              aes(x = ds, ymin = yhat_lower, ymax = yhat_upper),\n              fill = \"lightblue\", alpha = 0.5) +\n  geom_line(data = ontario_df,\n            aes(x = date, y = new_cases),\n            color = \"black\") +\n  geom_line(data = forecast_p_df,\n            aes(x = ds, y = yhat),\n            color = \"red\") +\n  labs(title = \"Ontario Weekly COVID Cases Forecast (Prophet)\",\n       x = \"Date\", y = \"New Cases\") +\n  theme_minimal()",
+    "section": "1.8 Plot",
+    "text": "1.8 Plot\nFor comparison, plot both the forecasted and original data. You can copy the following code and change parameters to fit the naming convention of your own code.\n\nggplot() +\n  geom_line(data = ontario_df,\n            aes(x = date, y = new_cases),\n            color = \"black\") +\n  geom_line(data = forecast_df,\n            aes(x = seq(max(ontario_df$date) + 7,\n                        by = \"week\",\n                        length.out = 52),\n                y = Point.Forecast),\n            color = \"red\") +\n  labs(title = \"Ontario Weekly COVID Cases Forecast\",\n       y = \"New Cases\",\n       x = \"Date\") +\n  theme_minimal()\n\n\nggplot() +\n  geom_ribbon(data = forecast_p_df,\n              aes(x = ds, ymin = yhat_lower, ymax = yhat_upper),\n              fill = \"lightblue\", alpha = 0.5) +\n  geom_line(data = ontario_df,\n            aes(x = date, y = new_cases),\n            color = \"black\") +\n  geom_line(data = forecast_p_df,\n            aes(x = ds, y = yhat),\n            color = \"red\") +\n  labs(title = \"Ontario Weekly COVID Cases Forecast (Prophet)\",\n       x = \"Date\", y = \"New Cases\") +\n  theme_minimal()",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
     ]
@@ -73,8 +73,8 @@
     "objectID": "guide.html#compare",
     "href": "guide.html#compare",
     "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
-    "section": "1.8 Compare",
-    "text": "1.8 Compare\nforecasting between forecast and prophet\n\n\n\n\n\n\nForecasted plot using forecast\n\n\n\n\n\n\n\nForecasted plot using prophet",
+    "section": "1.9 Compare",
+    "text": "1.9 Compare\nforecasting between forecast and prophet\n\n\n\n\n\n\nForecasted plot using forecast\n\n\n\n\n\n\n\nForecasted plot using prophet",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
     ]
@@ -84,7 +84,7 @@
     "href": "guide.html#footnotes",
     "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
     "section": "",
-    "text": "Documentation for each package can be found in the CRAN at these links: covid19.analytics, dplyr, lubridate, ggplot2, forecast, readr, skimr, prophet↩︎",
+    "text": "Documentation for each package can be found in the CRAN at these links: covid19.analytics, dplyr, lubridate, ggplot2, forecast, readr, skimr, prophet, tseries↩︎",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
     ]
@@ -208,6 +208,136 @@
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>C</span>  <span class='chapter-title'>Task Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "guide.html#stationarity",
+    "href": "guide.html#stationarity",
+    "title": "1  Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet",
+    "section": "1.6 Stationarity",
+    "text": "1.6 Stationarity\nMost statistical methods require an exploration of the property stationarity, including ARIMA, which will be discussed later. In short, it means that the mean, variance, autocorrelation structure, and others stay constant over time. There are multiple ways to investigate this in a data set. In this user guide, we will go over the Augmented Dickey-Fuller Test (ADF). Others can be found here.\n\n1.6.1 Augmented Dickey-Fuller (ADF) test\n\nadf_test &lt;- adf.test(ontario_df$new_cases)\nprint(\"ADF Test:\")\nprint(adf_test)",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "User Guide: Annual Review Article Topic",
+    "section": "",
+    "text": "1 Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet\nThis user guide will demonstrate how to attain data from COVID-19 using the covid19.analytics",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#open-rstudio",
+    "href": "index.html#open-rstudio",
+    "title": "User Guide: Annual Review Article Topic",
+    "section": "1.1 Open RStudio",
+    "text": "1.1 Open RStudio\nIf you have not yet installed RStudio or would like to update your version of RStudio, visit the following link: https://posit.co/downloads/. Create a new R script.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#install-and-load-packages",
+    "href": "index.html#install-and-load-packages",
+    "title": "User Guide: Annual Review Article Topic",
+    "section": "1.2 Install and Load Packages",
+    "text": "1.2 Install and Load Packages\nInstall the following packages1 if you have not already:\n\ncovid19.analytics\n\nfor the purposes of this guide, this package will be used to access various data sets about COVID-19\n\ndplyr\n\ndplyr is a R standard for creating data pipelines and transforming data frames to fit the desired format\n\nlubridate\n\ndates often require special packages for processing, such as noting the different possible forms that dates can come in (mm/dd/yyyy, yy/mm/dd, etc.). This belongs under the package tidyverse\n\nggplot2\n\npopular package for data visualization. For exploration of other uses of ggplot2, visit this cheat sheet, also included in tidyverse\n\nforecast\n\npackage that brings simple forecasting ability\n\nreadr\n\nalso belonging underneath tidyverse, readr allows for easier manipulation of data frames\n\nskimr\n\npackage used to skim data frames for basic data exploration and suggestion of the forms of the data used. It gives summary statistics of each column in a data frame\n\nprophet\n\npackage that allows for forecasting with more complex trends such as seasonal trends\n\ntseries\n\npackage which will be used for checking assumptions for time series data\n\n\nTo install packages, use the function install.packages() with the package name in quotation marks. Be sure to comment out this code afterwards so it doesn’t repeatedly install the code if you run all of the code at once.\n\nlibrary(covid19.analytics)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(forecast)\nlibrary(readr)\nlibrary(skimr)\nlibrary(prophet)\nlibrary(tseries)\n\nFor a quick temperature check on which packages have been added to the active session and their order, execute the search() function without any parameters. You can use this to validate that you have all of the packages listed above.\n [1] \".GlobalEnv\"                \"package:prophet\"           \"package:rlang\"            \n [4] \"package:Rcpp\"              \"package:skimr\"             \"package:readr\"            \n [7] \"package:forecast\"          \"package:ggplot2\"           \"package:lubridate\"        \n[10] \"package:dplyr\"             \"package:covid19.analytics\" \"tools:rstudio\"            \n[13] \"package:stats\"             \"package:graphics\"          \"package:grDevices\"        \n[16] \"package:utils\"             \"package:datasets\"          \"package:methods\"          \n[19] \"Autoloads\"                 \"package:base\"",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#load-in-data",
+    "href": "index.html#load-in-data",
+    "title": "User Guide: Annual Review Article Topic",
+    "section": "1.3 Load in Data",
+    "text": "1.3 Load in Data\nIn the covid19.analytics package, there are a few data sets that can be loaded in and used for easy examples. This user guide will demonstrate forecasting using its Canada data, accessed through covid19.Canada.data(). If you plan to use a different data set, make sure that the data suits the form required for time series analysis. Future sections will explain how to check or obtain the correct format.\n\ndf = data.frame(covid19.Canada.data())\nhead(df)\nskim(df)\n\nskim(df) goes variable by variable in df and displays the summary statistics depending on the type of variable used. While each variable will show its completeness, a numeric variable will show the mean, standard deviation, and percentile values and a character variable will display the minimum number of characters in the string, the maximum number of characters, the number of unique strings, and a few other features. In the date column of the Canada Covid-19 data frame, there are 0 in n_missing, and the min and max values are both at 10. This would indicate that each row has a value for date and it follows some variation of “dd/mm/yyyy” given each has 10 characters. See the next section on what to do in case this is not true.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#check-date-format",
+    "href": "index.html#check-date-format",
+    "title": "User Guide: Annual Review Article Topic",
+    "section": "1.4 Check Date Format",
+    "text": "1.4 Check Date Format\nBefore being able to work with dates, you must have only one column for the date variable. If your data does not have date in one column and instead spreads out day, month, and year into multiple columns, you can use the dplyr package and the following step to combine columns:\n\ndf &lt;- df %&gt;% mutate(date=paste(year, month, day, sep = \"-\"))\n\nwhere df is the name of your data frame, date is the name of the new column that you are forming, the first three parameters of paste are the names of your existing columns of date data, and sep = \"-\" indicates that each field will be separated with a hyphen. These should be modified to fit your use case.\nNext, the package lubridate is best for working with dates in R. Once your date column properly includes the right content, it is important to ensure that they are in the correct format. For working with time-series data, it is best practice to use ymd (year-month-day) format. This format allows the data to be sorted to form chronological order.\n\ndf$date &lt;- ymd(df$date)\n\nTo explain how this format is best, let’s say dates were in the day-month-year format instead. Running a basic sort function would order by whether it is the first, second, third, etc. day of the month, then by what month it is, and then finally by year. The inverse would sort by year first, then month, then day. The end result is a list of date which are in proper chronological order.\nAdditionally, it makes more logical sense! The first item in a date sequence should be the most important, which is the year. Often, you can tell more about the context of a date given the year than the month or what day of the month it is.\n\n“Europeans get it wrong. Americans get it wrong. Only computer scientists get it right.”\n\nDr. Chris Bourke 2024, my Computing II professor, about date formats",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#clean-data",
+    "href": "index.html#clean-data",
+    "title": "User Guide: Annual Review Article Topic",
+    "section": "1.5 Clean data",
+    "text": "1.5 Clean data\nCreate a new data frame as a subset of your previous data frame, selecting only necessary columns. This makes the rest of the steps simpler when there is less information to comb through.\n\nontario_df &lt;- df %&gt;%\n  filter(prname == \"Ontario\") %&gt;%\n  arrange(date) %&gt;%\n  mutate(totalcases = parse_number(totalcases, na = c(\"-\", \"\"))) %&gt;%\n  filter(!is.na(totalcases)) %&gt;%\n  mutate(new_cases = c(NA, diff(totalcases))) %&gt;%\n  filter(!is.na(new_cases)) %&gt;%\n  select(date,new_cases)\n\nIn this example, we are filtering based on the province name “Ontario”, which selects all rows in the data frame that belong to Ontario, then sorting by the date. The number of total cases was originally listed as a character variable, so the next few lines such as parsing the number from totalcases and filtering out any missing values is necessary. If total cases or whichever variable you would like to analyze does not have this error, you do not need to include parsing.\nAdditionally, the question that we are interested in this case is not the total cases, but the number of new cases. To achieve this, a new column was formed, new_cases, which was then calculated taking the difference between observations of total cases. Sorting via date is important before this step to guarantee that the new_cases shows the difference between the correct dates and not arbitrarily which rows are positioned next to each other.\nLastly, select is used to isolate which columns are being used later during forecasting.\n\n1.5.1 Optional: Skim Again\nSkimming again helps to ensure that your data is in the correct form and that the filtering and mutation did not create any new holes or transformed the data in a way that was not intended.\n\nhead(ontario_df)\nskim(ontario_df)",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#stationarity",
+    "href": "index.html#stationarity",
+    "title": "User Guide: Annual Review Article Topic",
+    "section": "1.6 Stationarity",
+    "text": "1.6 Stationarity\nMost statistical methods require an exploration of the property stationarity, including ARIMA, which will be discussed later. In short, it means that the mean, variance, autocorrelation structure, and others stay constant over time. There are multiple ways to investigate this in a data set. In this user guide, we will go over the Augmented Dickey-Fuller Test (ADF). Others can be found here.\n\n1.6.1 Augmented Dickey-Fuller (ADF) test\n\nadf_test &lt;- adf.test(ontario_df$new_cases)\nprint(\"ADF Test:\")\nprint(adf_test)\n\n[1] \"ADF Test:\"\n\n    Augmented Dickey-Fuller Test\n\ndata:  ontario_df$new_cases\nDickey-Fuller = -3.9025, Lag order = 6,\np-value = 0.0148\nalternative hypothesis: stationary",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#forecast-new-data",
+    "href": "index.html#forecast-new-data",
+    "title": "User Guide: Annual Review Article Topic",
+    "section": "1.7 Forecast New Data",
+    "text": "1.7 Forecast New Data\n\n1.7.1 R Package forecast\nThe demonstration with the forecast package will be consistent with what is known as Autoregressive Integrated Moving Average (ARIMA). The forecast package is capable of doing other methods of time series forecasting, but we will focus on ARIMA for simplicity’s sake.\nThe first step is to decompose the data. This shows the breakdown of trends by the overall trend, the seasonal shifts, and discerned randomness. Looking at this plot, shown in Figure 1, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the Covid-19 data on Ontario, Canada, we can see that there is a lot of randomness that tends to vary but with a consistent spike around the halfway mark when a new strain of Covid-19 caused an influx of cases.\n\nts_cases &lt;- ts(ontario_df$new_cases, frequency = 24)\nd&lt;-decompose(ts_cases, \"multiplicative\")\nplot(d)\n\n\nfit &lt;- auto.arima(ontario_df$new_cases)\nsummary(fit)\n\nforecast_8 &lt;- forecast(fit, h = 12)\nforecast_df &lt;- data.frame(forecast_8)\n\n\n\n1.7.2 R Package prophet\n\nprophet_df &lt;- ontario_df %&gt;% \n  rename(ds = date, y = new_cases)\n\nm &lt;- prophet(prophet_df, yearly.seasonality = TRUE)\nfuture &lt;- make_future_dataframe(m, periods = 52, freq = \"week\")\nforecast_p &lt;- predict(m, future)\n\nforecast_p_df &lt;- forecast_p %&gt;% select(ds, yhat, yhat_lower, yhat_upper)",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#plot",
+    "href": "index.html#plot",
+    "title": "User Guide: Annual Review Article Topic",
+    "section": "1.8 Plot",
+    "text": "1.8 Plot\nFor comparison, plot both the forecasted and original data. You can copy the following code and change parameters to fit the naming convention of your own code.\n\nggplot() +\n  geom_ribbon(data = forecast_df,\n              aes(x = seq(max(ontario_df$date) + 7, by = \"week\",\n                          length.out = 12), ymin = Lo.95, ymax = Hi.95),\n              fill = \"lightblue\", alpha = 0.5) +\n  geom_line(data = ontario_df,\n            aes(x = date, y = new_cases),\n            color = \"black\") +\n  geom_line(data = forecast_df,\n            aes(x = seq(max(ontario_df$date) + 7,\n                        by = \"week\",\n                        length.out = 12),\n                y = Point.Forecast),\n            color = \"red\") +\n  labs(title = \"Ontario Weekly COVID Cases Forecast\",\n       y = \"New Cases\",\n       x = \"Date\") +\n  theme_minimal()\n\n\nggplot() +\n  geom_ribbon(data = forecast_p_df,\n              aes(x = ds, ymin = yhat_lower, ymax = yhat_upper),\n              fill = \"lightblue\", alpha = 0.5) +\n  geom_line(data = ontario_df,\n            aes(x = date, y = new_cases),\n            color = \"black\") +\n  geom_line(data = forecast_p_df,\n            aes(x = ds, y = yhat),\n            color = \"red\") +\n  labs(title = \"Ontario Weekly COVID Cases Forecast (Prophet)\",\n       x = \"Date\", y = \"New Cases\") +\n  theme_minimal()",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#compare",
+    "href": "index.html#compare",
+    "title": "User Guide: Annual Review Article Topic",
+    "section": "1.9 Compare",
+    "text": "1.9 Compare\nThese two plots are examples of ones generated using forecast then prophet.\n\n\n\n\n\n\nFigure 1: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using forecast\n\n\n\n\n\n\n\nFigure 2: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using prophet",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#footnotes",
+    "href": "index.html#footnotes",
+    "title": "User Guide: Annual Review Article Topic",
+    "section": "",
+    "text": "Documentation for each package can be found in the CRAN at these links: covid19.analytics, dplyr, lubridate, ggplot2, forecast, readr, skimr, prophet, tseries↩︎",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#date-format",
+    "href": "index.html#date-format",
+    "title": "User Guide: Annual Review Article Topic",
+    "section": "1.4 Date Format",
+    "text": "1.4 Date Format\nBefore being able to work with dates, you must have only one column for the date variable. If your data does not have date in one column and instead spreads out day, month, and year into multiple columns, you can use the dplyr package and the following step to combine columns:\n\ndf &lt;- df %&gt;% mutate(date=paste(year, month, day, sep = \"-\"))\n\nwhere df is the name of your data frame, date is the name of the new column that you are forming, the first three parameters of paste are the names of your existing columns of date data, and sep = \"-\" indicates that each field will be separated with a hyphen. These should be modified to fit your use case.\nNext, the package lubridate is best for working with dates in R. Once your date column properly includes the right content, it is important to ensure that they are in the correct format. For working with time-series data, it is best practice to use ymd (year-month-day) format. This format allows the data to be sorted to form chronological order.\n\ndf$date &lt;- ymd(df$date)\n\nTo explain how this format is best, let’s say dates were in the day-month-year format instead. Running a basic sort function would order by whether it is the first, second, third, etc. day of the month, then by what month it is, and then finally by year. The inverse would sort by year first, then month, then day. The end result is a list of date which are in proper chronological order.\nAdditionally, it makes more logical sense! The first item in a date sequence should be the most important, which is the year. Often, you can tell more about the context of a date given the year than the month or what day of the month it is.\n\n“Europeans get it wrong. Americans get it wrong. Only computer scientists get it right.”\n\nDr. Chris Bourke 2024, my Computing II professor, about date formats",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</span>"
     ]
   }
 ]

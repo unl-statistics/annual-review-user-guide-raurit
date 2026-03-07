@@ -1,30 +1,258 @@
-# Assignment Flow {.unnumbered}
+# Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet
 
-This project is set up to scaffold this user guide and set you up for success.
+This user guide will demonstrate how to attain data from COVID-19 using the `covid19.analytics` and explore various methods of forecasting.
 
-Start at `topic.qmd` and identify a topic for your user guide.
+## Open RStudio
 
-Once you've proposed a topic and received my approval/feedback, you can convert the contents of `topic.qmd` into an introductory paragraph in your report. Please leave the `topic.qmd` file as an appendix, to document the different stages of this project. 
+If you have not yet installed RStudio or would like to update your version of RStudio, visit the following link: [https://posit.co/downloads/](https://posit.co/downloads/). Create a new R script.
 
-Once we've agreed on a topic for your user guide, you will proceed to `needs.qmd` and `task-analysis.qmd`. Both will be submitted at the same check-in, and both will be included in your final report as appendices. 
-You should be able to re-purpose most of the information in `task-analysis.qmd` to orient the user to different components of the task you've chosen.
+![](rScript.png)
 
-Your next step is to actually write the content that satisfies the work you outlined in `task-analysis.qmd`. 
+## Install and Load Packages
 
-Once you're finished with that, ideally, you'll have plenty of time to edit and streamline your report. 
-Feel free to trade reports with a friend and try to complete your friend's task - this will help you both identify areas where the guide isn't as clear. 
-Try to complete the task with a different data set - that often helps find trouble spots.
+Install the following packages[^1] if you have not already:
+
+  - `covid19.analytics`
+    - for the purposes of this guide, this package will be used to access various data sets about COVID-19
+  - `dplyr`
+    - dplyr is a R standard for creating data pipelines and transforming data frames to fit the desired format
+  - `lubridate`
+    - dates often require special packages for processing, such as noting the different possible forms that dates can come in (mm/dd/yyyy, yy/mm/dd, etc.). This belongs under the package `tidyverse`
+  - `ggplot2`
+    - popular package for data visualization. For exploration of other uses of `ggplot2`, visit this [cheat sheet](https://rstudio.github.io/cheatsheets/data-visualization.pdf), also included in `tidyverse`
+  - `forecast`
+    - package that brings simple forecasting ability
+  - `readr`
+    - also belonging underneath `tidyverse`, `readr` allows for easier manipulation of data frames
+  - `skimr`
+    - package used to skim data frames for basic data exploration and suggestion of the forms of the data used. It gives summary statistics of each column in a data frame
+  - `prophet`
+    - package that allows for forecasting with more complex trends such as seasonal trends
+  - `tseries`
+    - package which will be used for checking assumptions for time series data
+    
+To install packages, use the function `install.packages()` with the package name in quotation marks. Be sure to comment out this code afterwards so it doesn't repeatedly install the code if you run all of the code at once.
+    
+```{r}
+#| eval: false
+library(covid19.analytics)
+library(dplyr)
+library(ggplot2)
+library(forecast)
+library(readr)
+library(skimr)
+library(prophet)
+library(tseries)
+```
+
+For a quick temperature check on which packages have been added to the active session and their order, execute the `search()` function without any parameters. You can use this to validate that you have all of the packages listed above.
+
+```
+ [1] ".GlobalEnv"                "package:prophet"           "package:rlang"            
+ [4] "package:Rcpp"              "package:skimr"             "package:readr"            
+ [7] "package:forecast"          "package:ggplot2"           "package:lubridate"        
+[10] "package:dplyr"             "package:covid19.analytics" "tools:rstudio"            
+[13] "package:stats"             "package:graphics"          "package:grDevices"        
+[16] "package:utils"             "package:datasets"          "package:methods"          
+[19] "Autoloads"                 "package:base"
+```
+
+## Load in Data
+
+In the `covid19.analytics` package, there are a few data sets that can be loaded in and used for easy examples. This user guide will demonstrate forecasting using its Canada data, accessed through `covid19.Canada.data()`. If you plan to use a different data set, make sure that the data suits the form required for time series analysis. Future sections will explain how to check or obtain the correct format.
+
+```{r}
+#| eval: false
+
+df = data.frame(covid19.Canada.data())
+head(df)
+skim(df)
+```
+
+`skim(df)` goes variable by variable in `df` and displays the summary statistics depending on the type of variable used. While each variable will show its completeness, a numeric variable will show the mean, standard deviation, and percentile values and a character variable will display the minimum number of characters in the string, the maximum number of characters, the number of unique strings, and a few other features. In the date column of the Canada Covid-19 data frame, there are 0 in `n_missing`, and the `min` and `max` values are both at 10. This would indicate that each row has a value for date and it follows some variation of "dd/mm/yyyy" given each has 10 characters. See the next section on what to do in case this is not true.
+
+## Date Format
+
+Before being able to work with dates, you must have only one column for the date variable. If your data does not have date in one column and instead spreads out day, month, and year into multiple columns, you can use the `dplyr` package and the following step to combine columns:
+
+```{r}
+#| eval: false
+
+df <- df %>% mutate(date=paste(year, month, day, sep = "-"))
+```
+
+where `df` is the name of your data frame, `date` is the name of the new column that you are forming, the first three parameters of `paste` are the names of your existing columns of date data, and `sep = "-"` indicates that each field will be separated with a hyphen. These should be modified to fit your use case.
+
+Next, the package `lubridate` is best for working with dates in R. Once your `date` column properly includes the right content, it is important to ensure that they are in the correct format. For working with time-series data, it is best practice to use `ymd` (year-month-day) format. This format allows the data to be sorted to form chronological order. 
+
+```{r}
+#| eval: false
+
+df$date <- ymd(df$date)
+```
+
+To explain how this format is best, let's say dates were in the day-month-year format instead. Running a basic sort function would order by whether it is the first, second, third, etc. day of the month, then by what month it is, and then finally by year. The inverse would sort by year first, then month, then day. The end result is a list of date which are in proper chronological order.
+
+Additionally, it makes more logical sense! The first item in a date sequence should be the most important, which is the year. Often, you can tell more about the context of a date given the year than the month or what day of the month it is.
+
+> "Europeans get it wrong. Americans get it wrong. Only computer scientists get it right."
+>
+> - *Dr. Chris Bourke 2024, my Computing II professor, about date formats*
+
+## Clean data
+
+Create a new data frame as a subset of your previous data frame, selecting only necessary columns. This makes the rest of the steps simpler when there is less information to comb through.
+
+```{r}
+#| eval: false
+
+ontario_df <- df %>%
+  filter(prname == "Ontario") %>%
+  arrange(date) %>%
+  mutate(totalcases = parse_number(totalcases, na = c("-", ""))) %>%
+  filter(!is.na(totalcases)) %>%
+  mutate(new_cases = c(NA, diff(totalcases))) %>%
+  filter(!is.na(new_cases)) %>%
+  select(date,new_cases)
+```
+
+In this example, we are filtering based on the province name "Ontario", which selects all rows in the data frame that belong to Ontario, then sorting by the date. The number of total cases was originally listed as a character variable, so the next few lines such as parsing the number from `totalcases` and filtering out any missing values is necessary. If total cases or whichever variable you would like to analyze does not have this error, you do not need to include parsing. 
+
+Additionally, the question that we are interested in this case is not the total cases, but the number of new cases. To achieve this, a new column was formed, `new_cases`, which was then calculated taking the difference between observations of total cases. Sorting via date is important before this step to guarantee that the `new_cases` shows the difference between the correct dates and not arbitrarily which rows are positioned next to each other.
+
+Lastly, `select` is used to isolate which columns are being used later during forecasting.
+
+### Optional: Skim Again
+
+Skimming again helps to ensure that your data is in the correct form and that the filtering and mutation did not create any new holes or transformed the data in a way that was not intended. 
+
+```{r}
+#| eval: false
+head(ontario_df)
+skim(ontario_df)
+```
+
+## Stationarity
+
+Most statistical methods require an exploration of the property **stationarity**, including ARIMA, which will be discussed later. In short, it means that the mean, variance, autocorrelation structure, and others stay constant over time. There are multiple ways to investigate this in a data set. In this user guide, we will go over the Augmented Dickey-Fuller Test (ADF). Others can be found [here](https://www.geeksforgeeks.org/r-machine-learning/stationarity-of-time-series-data-using-r/).
+
+### Augmented Dickey-Fuller (ADF) test
+
+```{r}
+#| eval: false
+
+adf_test <- adf.test(ontario_df$new_cases)
+print("ADF Test:")
+print(adf_test)
+```
+
+```
+[1] "ADF Test:"
+
+	Augmented Dickey-Fuller Test
+
+data:  ontario_df$new_cases
+Dickey-Fuller = -3.9025, Lag order = 6,
+p-value = 0.0148
+alternative hypothesis: stationary
+```
+
+## Forecast New Data
+
+### R Package `forecast`
+
+The demonstration with the `forecast` package will be consistent with what is known as Autoregressive Integrated Moving Average (ARIMA). The `forecast` package is capable of doing other methods of time series forecasting, but we will focus on ARIMA for simplicity's sake.
+
+The first step is to decompose the data. This shows the breakdown of trends by the overall trend, the seasonal shifts, and discerned randomness. Looking at this plot, shown in Figure 1, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the Covid-19 data on Ontario, Canada, we can see that there is a lot of randomness that tends to vary but with a consistent spike around the halfway mark when a new strain of Covid-19 caused an influx of cases.
+
+```{r}
+#| eval: false
+
+ts_cases <- ts(ontario_df$new_cases, frequency = 24)
+d<-decompose(ts_cases, "multiplicative")
+plot(d)
+```
+
+![](decomp.png)
 
 
-When you submit your final report, you may remove `index.qmd` from the `_quarto.yml` file, which will remove this chapter (which is quite unnecessary for your user) from the report. 
-You should also take the time to make sure your name is listed as both author and copyright holder in the `_quarto.yml` file. 
-Feel free to make a custom cover for your manual if you would like to do so. 
-You can also tweak the CSS/theme for the book, so long as you're conscious of accessibility concerns. 
+```{r}
+#| eval: false
 
-::: callout-caution
-## Building the report
+fit <- auto.arima(ontario_df$new_cases)
+summary(fit)
 
-If you are using RStudio to complete this report, you can hit (Ctrl/Cmd)-Shift-B to build the whole report. You can also type `quarto render .` on the command line in the project folder to accomplish the same thing.
+forecast_8 <- forecast(fit, h = 12)
+forecast_df <- data.frame(forecast_8)
+```
 
-If you have questions about how to customize or debug your book, it may be helpful to start at the quarto book documentation [@positpbcCreatingBook2024]. 
+### R Package `prophet`
+
+```{r}
+#| eval: false
+
+prophet_df <- ontario_df %>% 
+  rename(ds = date, y = new_cases)
+
+m <- prophet(prophet_df, yearly.seasonality = TRUE)
+future <- make_future_dataframe(m, periods = 52, freq = "week")
+forecast_p <- predict(m, future)
+
+forecast_p_df <- forecast_p %>% select(ds, yhat, yhat_lower, yhat_upper)
+```
+
+## Plot
+
+For comparison, plot both the forecasted and original data. You can copy the following code and change parameters to fit the naming convention of your own code.
+
+```{r}
+#| eval: false
+
+ggplot() +
+  geom_ribbon(data = forecast_df,
+              aes(x = seq(max(ontario_df$date) + 7, by = "week",
+                          length.out = 12), ymin = Lo.95, ymax = Hi.95),
+              fill = "lightblue", alpha = 0.5) +
+  geom_line(data = ontario_df,
+            aes(x = date, y = new_cases),
+            color = "black") +
+  geom_line(data = forecast_df,
+            aes(x = seq(max(ontario_df$date) + 7,
+                        by = "week",
+                        length.out = 12),
+                y = Point.Forecast),
+            color = "red") +
+  labs(title = "Ontario Weekly COVID Cases Forecast",
+       y = "New Cases",
+       x = "Date") +
+  theme_minimal()
+```
+
+```{r}
+#| eval: false
+ggplot() +
+  geom_ribbon(data = forecast_p_df,
+              aes(x = ds, ymin = yhat_lower, ymax = yhat_upper),
+              fill = "lightblue", alpha = 0.5) +
+  geom_line(data = ontario_df,
+            aes(x = date, y = new_cases),
+            color = "black") +
+  geom_line(data = forecast_p_df,
+            aes(x = ds, y = yhat),
+            color = "red") +
+  labs(title = "Ontario Weekly COVID Cases Forecast (Prophet)",
+       x = "Date", y = "New Cases") +
+  theme_minimal()
+```
+
+## Compare
+
+These two plots are examples of ones generated using `forecast` then `prophet`. 
+
+::: {layout-ncol=2}
+![Figure 1: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using `forecast`](forecast.png){.lightbox}
+
+![Figure 2: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using `prophet`](prophet.png){.lightbox}
 :::
+
+[^1]: Documentation for each package can be found in the CRAN at these links: [covid19.analytics](https://cran.r-project.org/web/packages/covid19.analytics/readme/README.html), [dplyr](https://cran.r-project.org/web/packages/dplyr/readme/README.html), [lubridate](https://rstudio.github.io/cheatsheets/html/lubridate.html), [ggplot2](https://ggplot2.tidyverse.org/), [forecast](https://www.rdocumentation.org/packages/forecast/versions/9.0.1), [readr](https://cran.r-project.org/web/packages/readr/readme/README.html), [skimr](https://www.rdocumentation.org/packages/skimr/versions/2.2.2), [prophet](https://facebook.github.io/prophet/), [tseries](https://r-packages.io/packages/tseries)
