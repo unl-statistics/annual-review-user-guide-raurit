@@ -463,7 +463,7 @@ window.Quarto = {
 <p>Most statistical methods of forecasting require an exploration of the property <strong>stationarity</strong>, including ARIMA, which will be discussed later. In short, it means that the mean, variance, autocorrelation structure, and others stay constant over time <span class="citation" data-cites="StationarityDifferencingTime"><span>“Stationarity and Differencing of Time Series Data”</span> (<a href="references.html#ref-StationarityDifferencingTime" role="doc-biblioref">n.d.</a>)</span>. There are multiple ways to investigate this in a data set, both informally and formally. In this user guide, we will go over the Augmented Dickey-Fuller Test (ADF). Others can be found <a href="https://www.geeksforgeeks.org/r-machine-learning/stationarity-of-time-series-data-using-r/">here</a>.</p>
 <section id="augmented-dickey-fuller-adf-test" class="level3" data-number="1.6.1">
 <h3 data-number="1.6.1" class="anchored" data-anchor-id="augmented-dickey-fuller-adf-test"><span class="header-section-number">1.6.1</span> Augmented Dickey-Fuller (ADF) test</h3>
-<p>This is a formal test to see if time series data is stationary, where the null hypothesis is the data is non-stationary and the alternative hypothesis is that the data is stationary. <span class="citation" data-cites="mushtaqAugmentedDickeyFuller2011">Mushtaq (<a href="references.html#ref-mushtaqAugmentedDickeyFuller2011" role="doc-biblioref">2011</a>)</span></p>
+<p>This is a formal test to see if time series data is stationary, where the null hypothesis says the data is non-stationary and the alternative hypothesis says the data is stationary. <span class="citation" data-cites="mushtaqAugmentedDickeyFuller2011">Mushtaq (<a href="references.html#ref-mushtaqAugmentedDickeyFuller2011" role="doc-biblioref">2011</a>)</span></p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>adf_test <span class="ot">&lt;-</span> <span class="fu">adf.test</span>(ontario_df<span class="sc">$</span>new_cases)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"ADF Test:"</span>)</span>
@@ -594,23 +594,23 @@ alternative hypothesis: stationary</code></pre>
 <h2 data-number="1.9" class="anchored" data-anchor-id="compare"><span class="header-section-number">1.9</span> Compare</h2>
 <section id="demonstration" class="level3" data-number="1.9.1">
 <h3 data-number="1.9.1" class="anchored" data-anchor-id="demonstration"><span class="header-section-number">1.9.1</span> Demonstration</h3>
-<p>These two plots are examples of ones generated using <code>forecast</code> then <code>prophet</code>. The largest difference that we can see is the way that each handles new predictions. Figure 3 using <code>prophet</code> focuses on smoothing out the current raw data then using the trends to predict how future data will behave. In both, the confidence bands in blue showcase that the direction is not conclusive. This could be due to the fact that there are multiple strands of Covid-19 with different transmission rates. Additionally, there are less tests for Covid-19 as vaccines became more widely spread and it was seen as less of a threat as when it first was deemed a global pandemic. Many other external factors could contribute to the near erasure of high inflections in new cases.</p>
+<p>These two plots are examples of ones generated using <code>forecast</code> then <code>prophet</code>. The largest difference that we can see is the way that each handles new predictions. Figure 4 using <code>prophet</code> focuses on smoothing out the current raw data then using the trends to predict how future data will behave. In both, the confidence bands in blue showcase that the direction is not conclusive. This could be due to the fact that there are multiple strands of Covid-19 with different transmission rates. Additionally, there are less tests for Covid-19 as vaccines became more widely spread and it was seen as less of a threat as when it first was deemed a global pandemic. Many other external factors could contribute to the near erasure of high inflections in new cases.</p>
 <p>Examining <code>forecast</code> more, the plot seems to be more</p>
 <div class="quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="forecast.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure 2: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using forecast"><img src="forecast.png" class="img-fluid figure-img" alt="Figure 2: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using forecast"></a></p>
-<figcaption>Figure 2: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using <code>forecast</code></figcaption>
+<p><a href="forecast.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using forecast"><img src="forecast.png" class="img-fluid figure-img" alt="Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using forecast"></a></p>
+<figcaption>Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using <code>forecast</code></figcaption>
 </figure>
 </div>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="prophet.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using prophet"><img src="prophet.png" class="img-fluid figure-img" alt="Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using prophet"></a></p>
-<figcaption>Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using <code>prophet</code></figcaption>
+<p><a href="prophet.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure 4: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using prophet"><img src="prophet.png" class="img-fluid figure-img" alt="Figure 4: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using prophet"></a></p>
+<figcaption>Figure 4: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using <code>prophet</code></figcaption>
 </figure>
 </div>
 </div>

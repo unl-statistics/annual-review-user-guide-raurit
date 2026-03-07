@@ -152,7 +152,7 @@ Most statistical methods of forecasting require an exploration of the property *
 
 ### Augmented Dickey-Fuller (ADF) test
 
-This is a formal test to see if time series data is stationary, where the null hypothesis is the data is non-stationary and the alternative hypothesis is that the data is stationary. @mushtaqAugmentedDickeyFuller2011
+This is a formal test to see if time series data is stationary, where the null hypothesis says the data is non-stationary and the alternative hypothesis says the data is stationary. @mushtaqAugmentedDickeyFuller2011
 
 ```{r}
 #| eval: false
