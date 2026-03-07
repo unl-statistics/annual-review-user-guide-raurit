@@ -1,6 +1,16 @@
 # Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet
 
-This user guide will demonstrate how to attain data from COVID-19 using the `covid19.analytics` and explore various methods of forecasting.
+This user guide will demonstrate how to attain data from COVID-19 using the `covid19.analytics` package and 2 methods of forecasting with ARIMA in the `forecast` package and the `prophet` package, a procedure used for forecasting created by Facebook. Before applying the concepts of time-series forecasting, here are a few notes and definitions to help in comprehending later steps in this guide:
+
+1. In practicality, "forecasting" and "prediction" are used interchangeably. Forecasting is prediction but with an emphasis on time-series data. 
+2. Time series can be dissected into seasonality, level, trend, and noise.
+  - **seasonality**: "short-term cyclical behavior" 
+  - **level**: "average value of the series" 
+  - **trend**: "change in the series from one period to the next" 
+  - **noise**: "random variation that results from measurement error or other causes" 
+3. These components as seen in (2) can either be multiplicative or additive, which describes the relationship between the components to achieve the response value. 
+
+@shmueliPracticalTimeSeries2024
 
 ## Open RStudio
 
@@ -48,13 +58,17 @@ library(tseries)
 For a quick temperature check on which packages have been added to the active session and their order, execute the `search()` function without any parameters. You can use this to validate that you have all of the packages listed above.
 
 ```
- [1] ".GlobalEnv"                "package:prophet"           "package:rlang"            
- [4] "package:Rcpp"              "package:skimr"             "package:readr"            
- [7] "package:forecast"          "package:ggplot2"           "package:lubridate"        
-[10] "package:dplyr"             "package:covid19.analytics" "tools:rstudio"            
-[13] "package:stats"             "package:graphics"          "package:grDevices"        
-[16] "package:utils"             "package:datasets"          "package:methods"          
-[19] "Autoloads"                 "package:base"
+ [1] ".GlobalEnv"                "package:tseries"          
+ [3] "package:prophet"           "package:rlang"            
+ [5] "package:Rcpp"              "package:skimr"            
+ [7] "package:readr"             "package:forecast"         
+ [9] "package:ggplot2"           "package:lubridate"        
+[11] "package:dplyr"             "package:covid19.analytics"
+[13] "tools:rstudio"             "package:stats"            
+[15] "package:graphics"          "package:grDevices"        
+[17] "package:utils"             "package:datasets"         
+[19] "package:methods"           "Autoloads"                
+[21] "package:base"   
 ```
 
 ## Load in Data
@@ -81,7 +95,7 @@ Before being able to work with dates, you must have only one column for the date
 df <- df %>% mutate(date=paste(year, month, day, sep = "-"))
 ```
 
-where `df` is the name of your data frame, `date` is the name of the new column that you are forming, the first three parameters of `paste` are the names of your existing columns of date data, and `sep = "-"` indicates that each field will be separated with a hyphen. These should be modified to fit your use case.
+where `df` is the name of your data frame, `date` is the name of the new column that you are forming, the first three parameters of `paste` are the names of your existing columns of date data, and `sep = "-"` indicates that each field will be separated with a hyphen @kuruiTidyverseTimeSeries2025. These should be modified to fit your use case.
 
 Next, the package `lubridate` is best for working with dates in R. Once your `date` column properly includes the right content, it is important to ensure that they are in the correct format. For working with time-series data, it is best practice to use `ymd` (year-month-day) format. This format allows the data to be sorted to form chronological order. 
 
@@ -134,9 +148,11 @@ skim(ontario_df)
 
 ## Stationarity
 
-Most statistical methods of forecasting require an exploration of the property **stationarity**, including ARIMA, which will be discussed later. In short, it means that the mean, variance, autocorrelation structure, and others stay constant over time. There are multiple ways to investigate this in a data set. In this user guide, we will go over the Augmented Dickey-Fuller Test (ADF). Others can be found [here](https://www.geeksforgeeks.org/r-machine-learning/stationarity-of-time-series-data-using-r/).
+Most statistical methods of forecasting require an exploration of the property **stationarity**, including ARIMA, which will be discussed later. In short, it means that the mean, variance, autocorrelation structure, and others stay constant over time @StationarityDifferencingTime. There are multiple ways to investigate this in a data set, both informally and formally. In this user guide, we will go over the Augmented Dickey-Fuller Test (ADF). Others can be found [here](https://www.geeksforgeeks.org/r-machine-learning/stationarity-of-time-series-data-using-r/).
 
 ### Augmented Dickey-Fuller (ADF) test
+
+This is a formal test to see if time series data is stationary, where the null hypothesis is the data is non-stationary and the alternative hypothesis is that the data is stationary. @mushtaqAugmentedDickeyFuller2011
 
 ```{r}
 #| eval: false
@@ -158,7 +174,7 @@ p-value = 0.0148
 alternative hypothesis: stationary
 ```
 
-As we can see, the p-value resulting from the test is less than $/alpha = 0.05$, which means that we are 95% confident that we reject the hypothesis that the data is not stationary.
+As we can see, the p-value resulting from the test is less than $\alpha = 0.05$, which means that we are 95% confident that we reject the hypothesis that the data is not stationary.
 
 ## Forecast New Data
 
@@ -174,12 +190,17 @@ The first step is to decompose the data. This shows the breakdown of trends by t
 ts_cases <- ts(ontario_df$new_cases, frequency = 24)
 d<-decompose(ts_cases, "multiplicative")
 plot(d)
+d<-decompose(ts_cases, "additive")
+plot(d)
 ```
 
-Looking at this plot, shown in Figure 1, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the Covid-19 data on Ontario, Canada, we can see that there is a lot of randomness that tends to vary but with a consistent spike around the halfway mark when a new strain of Covid-19 caused an influx of cases.
+Looking at these plots, shown in Figures 1 and 2, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the Covid-19 data on Ontario, Canada, we can see that there is a lot of randomness that tends to vary but with a consistent spike around the halfway mark when a new strain of Covid-19 caused an influx of cases. Revisit the differences between additive and multiplicative components as described at the top of the guide.
 
-![](decomp.png)
-*Figure 1: Decomposition of `new_cases` through the raw, observed data, overall trend, seasonality, and randomness*
+::: {layout-ncol=2}
+![Figure 1: Decomposition of `new_cases` through the raw, observed data, overall trend, seasonality, and randomness with multiplicative components](decomp.png){.lightbox}
+
+![Figure 1: Decomposition of `new_cases` through the raw, observed data, overall trend, seasonality, and randomness with additive components](decompadd.png){.lightbox}
+:::
 
 ```{r}
 #| eval: false
@@ -217,6 +238,7 @@ For comparison, plot both the forecasted and original data. You can copy the fol
 5. `labs()` are for the axis labels and graph title. Change the strings to fit the description of your data.
 6. `theme_minimal()` is for aesthetic purposes only. 
 
+### Code for plotting results from `forecast`
 ```{r}
 #| eval: false
 
@@ -240,6 +262,7 @@ ggplot() +
   theme_minimal()
 ```
 
+### Code for plotting results from `prophet`
 ```{r}
 #| eval: false
 ggplot() +
@@ -259,12 +282,20 @@ ggplot() +
 
 ## Compare
 
-These two plots are examples of ones generated using `forecast` then `prophet`. The largest difference that we can see is the way that each handles new predictions. `prophet` focuses on smoothing out the current raw data then using the trends to predict how future data will behave. In both, the confidence bands in blue showcase that the direction is not conclusive. This could be due to the fact that there are multiple strands of Covid-19 with different transmission rates. Additionally, there are less tests for Covid-19 as vaccines became more widely spread and it was seen as less of a threat as when it first was deemed a global pandemic. Many other external factors could contribute to the near erasure of high inflections in new cases.
+### Demonstration
+
+These two plots are examples of ones generated using `forecast` then `prophet`. The largest difference that we can see is the way that each handles new predictions. Figure 4 using `prophet` focuses on smoothing out the current raw data then using the trends to predict how future data will behave. In both, the confidence bands in blue showcase that the direction is not conclusive. This could be due to the fact that there are multiple strands of Covid-19 with different transmission rates. Additionally, there are less tests for Covid-19 as vaccines became more widely spread and it was seen as less of a threat as when it first was deemed a global pandemic. Many other external factors could contribute to the near erasure of high inflections in new cases.
+
+Examining `forecast` more, the plot seems to be more 
 
 ::: {layout-ncol=2}
-![Figure 1: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using `forecast`](forecast.png){.lightbox}
+![Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using `forecast`](forecast.png){.lightbox}
 
-![Figure 2: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using `prophet`](prophet.png){.lightbox}
+![Figure 4: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using `prophet`](prophet.png){.lightbox}
 :::
+
+### General Guidance
+
+Forecasting is a function of existing data. The more data that exists, the more narrow confidence bands will be. When examining the reliability of forecasting, it is best to be aware of the data that you are working with. The biggest issue seen in the demonstration was the predictions going below zero, which goes against the form of the `new_cases` variable. To explore issues like this, know the bounds of your data and whether or not forecasts break those hard boundaries. Forecasting always comes with the concern that you are extrapolating, therefore the reliability will always be in question as no one knows the future. The further you forecast from the original raw data, the more the reliability will decrease.
 
 [^1]: Documentation for each package can be found in the CRAN at these links: [covid19.analytics](https://cran.r-project.org/web/packages/covid19.analytics/readme/README.html), [dplyr](https://cran.r-project.org/web/packages/dplyr/readme/README.html), [lubridate](https://rstudio.github.io/cheatsheets/html/lubridate.html), [ggplot2](https://ggplot2.tidyverse.org/), [forecast](https://www.rdocumentation.org/packages/forecast/versions/9.0.1), [readr](https://cran.r-project.org/web/packages/readr/readme/README.html), [skimr](https://www.rdocumentation.org/packages/skimr/versions/2.2.2), [prophet](https://facebook.github.io/prophet/), [tseries](https://r-packages.io/packages/tseries)

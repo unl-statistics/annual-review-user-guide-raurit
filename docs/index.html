@@ -57,7 +57,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -248,8 +268,16 @@ window.Quarto = {
   <li><a href="#r-package-forecast" id="toc-r-package-forecast" class="nav-link" data-scroll-target="#r-package-forecast"><span class="header-section-number">1.7.1</span> R Package <code>forecast</code></a></li>
   <li><a href="#r-package-prophet" id="toc-r-package-prophet" class="nav-link" data-scroll-target="#r-package-prophet"><span class="header-section-number">1.7.2</span> R Package <code>prophet</code></a></li>
   </ul></li>
-  <li><a href="#plot" id="toc-plot" class="nav-link" data-scroll-target="#plot"><span class="header-section-number">1.8</span> Plot</a></li>
-  <li><a href="#compare" id="toc-compare" class="nav-link" data-scroll-target="#compare"><span class="header-section-number">1.9</span> Compare</a></li>
+  <li><a href="#plot" id="toc-plot" class="nav-link" data-scroll-target="#plot"><span class="header-section-number">1.8</span> Plot</a>
+  <ul class="collapse">
+  <li><a href="#code-for-plotting-results-from-forecast" id="toc-code-for-plotting-results-from-forecast" class="nav-link" data-scroll-target="#code-for-plotting-results-from-forecast"><span class="header-section-number">1.8.1</span> Code for plotting results from <code>forecast</code></a></li>
+  <li><a href="#code-for-plotting-results-from-prophet" id="toc-code-for-plotting-results-from-prophet" class="nav-link" data-scroll-target="#code-for-plotting-results-from-prophet"><span class="header-section-number">1.8.2</span> Code for plotting results from <code>prophet</code></a></li>
+  </ul></li>
+  <li><a href="#compare" id="toc-compare" class="nav-link" data-scroll-target="#compare"><span class="header-section-number">1.9</span> Compare</a>
+  <ul class="collapse">
+  <li><a href="#demonstration" id="toc-demonstration" class="nav-link" data-scroll-target="#demonstration"><span class="header-section-number">1.9.1</span> Demonstration</a></li>
+  <li><a href="#general-guidance" id="toc-general-guidance" class="nav-link" data-scroll-target="#general-guidance"><span class="header-section-number">1.9.2</span> General Guidance</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -290,7 +318,21 @@ window.Quarto = {
 
 <section id="forecasting-with-covid-19-data-using-r-packages-covid19.analytics-forecast-and-prophet" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</h1>
-<p>This user guide will demonstrate how to attain data from COVID-19 using the <code>covid19.analytics</code> and explore various methods of forecasting.</p>
+<p>This user guide will demonstrate how to attain data from COVID-19 using the <code>covid19.analytics</code> package and 2 methods of forecasting with ARIMA in the <code>forecast</code> package and the <code>prophet</code> package, a procedure used for forecasting created by Facebook. Before applying the concepts of time-series forecasting, here are a few notes and definitions to help in comprehending later steps in this guide:</p>
+<ol type="1">
+<li>In practicality, “forecasting” and “prediction” are used interchangeably. Forecasting is prediction but with an emphasis on time-series data.</li>
+<li>Time series can be dissected into seasonality, level, trend, and noise.</li>
+</ol>
+<ul>
+<li><strong>seasonality</strong>: “short-term cyclical behavior”</li>
+<li><strong>level</strong>: “average value of the series”</li>
+<li><strong>trend</strong>: “change in the series from one period to the next”</li>
+<li><strong>noise</strong>: “random variation that results from measurement error or other causes”</li>
+</ul>
+<ol start="3" type="1">
+<li>These components as seen in (2) can either be multiplicative or additive, which describes the relationship between the components to achieve the response value.</li>
+</ol>
+<p><span class="citation" data-cites="shmueliPracticalTimeSeries2024">Shmueli and Polak (<a href="references.html#ref-shmueliPracticalTimeSeries2024" role="doc-biblioref">2024</a>)</span></p>
 <section id="open-rstudio" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="open-rstudio"><span class="header-section-number">1.1</span> Open RStudio</h2>
 <p>If you have not yet installed RStudio or would like to update your version of RStudio, visit the following link: <a href="https://posit.co/downloads/">https://posit.co/downloads/</a>. Create a new R script.</p>
@@ -349,13 +391,17 @@ window.Quarto = {
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tseries)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>For a quick temperature check on which packages have been added to the active session and their order, execute the <code>search()</code> function without any parameters. You can use this to validate that you have all of the packages listed above.</p>
-<pre><code> [1] ".GlobalEnv"                "package:prophet"           "package:rlang"            
- [4] "package:Rcpp"              "package:skimr"             "package:readr"            
- [7] "package:forecast"          "package:ggplot2"           "package:lubridate"        
-[10] "package:dplyr"             "package:covid19.analytics" "tools:rstudio"            
-[13] "package:stats"             "package:graphics"          "package:grDevices"        
-[16] "package:utils"             "package:datasets"          "package:methods"          
-[19] "Autoloads"                 "package:base"</code></pre>
+<pre><code> [1] ".GlobalEnv"                "package:tseries"          
+ [3] "package:prophet"           "package:rlang"            
+ [5] "package:Rcpp"              "package:skimr"            
+ [7] "package:readr"             "package:forecast"         
+ [9] "package:ggplot2"           "package:lubridate"        
+[11] "package:dplyr"             "package:covid19.analytics"
+[13] "tools:rstudio"             "package:stats"            
+[15] "package:graphics"          "package:grDevices"        
+[17] "package:utils"             "package:datasets"         
+[19] "package:methods"           "Autoloads"                
+[21] "package:base"   </code></pre>
 </section>
 <section id="load-in-data" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="load-in-data"><span class="header-section-number">1.3</span> Load in Data</h2>
@@ -373,7 +419,7 @@ window.Quarto = {
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">date=</span><span class="fu">paste</span>(year, month, day, <span class="at">sep =</span> <span class="st">"-"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>where <code>df</code> is the name of your data frame, <code>date</code> is the name of the new column that you are forming, the first three parameters of <code>paste</code> are the names of your existing columns of date data, and <code>sep = "-"</code> indicates that each field will be separated with a hyphen. These should be modified to fit your use case.</p>
+<p>where <code>df</code> is the name of your data frame, <code>date</code> is the name of the new column that you are forming, the first three parameters of <code>paste</code> are the names of your existing columns of date data, and <code>sep = "-"</code> indicates that each field will be separated with a hyphen <span class="citation" data-cites="kuruiTidyverseTimeSeries2025">Kurui (<a href="references.html#ref-kuruiTidyverseTimeSeries2025" role="doc-biblioref">2025</a>)</span>. These should be modified to fit your use case.</p>
 <p>Next, the package <code>lubridate</code> is best for working with dates in R. Once your <code>date</code> column properly includes the right content, it is important to ensure that they are in the correct format. For working with time-series data, it is best practice to use <code>ymd</code> (year-month-day) format. This format allows the data to be sorted to form chronological order.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">ymd</span>(df<span class="sc">$</span>date)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -414,9 +460,10 @@ window.Quarto = {
 </section>
 <section id="stationarity" class="level2" data-number="1.6">
 <h2 data-number="1.6" class="anchored" data-anchor-id="stationarity"><span class="header-section-number">1.6</span> Stationarity</h2>
-<p>Most statistical methods of forecasting require an exploration of the property <strong>stationarity</strong>, including ARIMA, which will be discussed later. In short, it means that the mean, variance, autocorrelation structure, and others stay constant over time. There are multiple ways to investigate this in a data set. In this user guide, we will go over the Augmented Dickey-Fuller Test (ADF). Others can be found <a href="https://www.geeksforgeeks.org/r-machine-learning/stationarity-of-time-series-data-using-r/">here</a>.</p>
+<p>Most statistical methods of forecasting require an exploration of the property <strong>stationarity</strong>, including ARIMA, which will be discussed later. In short, it means that the mean, variance, autocorrelation structure, and others stay constant over time <span class="citation" data-cites="StationarityDifferencingTime"><span>“Stationarity and Differencing of Time Series Data”</span> (<a href="references.html#ref-StationarityDifferencingTime" role="doc-biblioref">n.d.</a>)</span>. There are multiple ways to investigate this in a data set, both informally and formally. In this user guide, we will go over the Augmented Dickey-Fuller Test (ADF). Others can be found <a href="https://www.geeksforgeeks.org/r-machine-learning/stationarity-of-time-series-data-using-r/">here</a>.</p>
 <section id="augmented-dickey-fuller-adf-test" class="level3" data-number="1.6.1">
 <h3 data-number="1.6.1" class="anchored" data-anchor-id="augmented-dickey-fuller-adf-test"><span class="header-section-number">1.6.1</span> Augmented Dickey-Fuller (ADF) test</h3>
+<p>This is a formal test to see if time series data is stationary, where the null hypothesis is the data is non-stationary and the alternative hypothesis is that the data is stationary. <span class="citation" data-cites="mushtaqAugmentedDickeyFuller2011">Mushtaq (<a href="references.html#ref-mushtaqAugmentedDickeyFuller2011" role="doc-biblioref">2011</a>)</span></p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>adf_test <span class="ot">&lt;-</span> <span class="fu">adf.test</span>(ontario_df<span class="sc">$</span>new_cases)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"ADF Test:"</span>)</span>
@@ -431,7 +478,7 @@ data:  ontario_df$new_cases
 Dickey-Fuller = -3.9025, Lag order = 6,
 p-value = 0.0148
 alternative hypothesis: stationary</code></pre>
-<p>As we can see, the p-value resulting from the test is less than <span class="math inline">\(/alpha = 0.05\)</span>, which means that we are 95% confident that we reject the hypothesis that the data is not stationary.</p>
+<p>As we can see, the p-value resulting from the test is less than <span class="math inline">\(\alpha = 0.05\)</span>, which means that we are 95% confident that we reject the hypothesis that the data is not stationary.</p>
 </section>
 </section>
 <section id="forecast-new-data" class="level2" data-number="1.7">
@@ -443,10 +490,31 @@ alternative hypothesis: stationary</code></pre>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ts_cases <span class="ot">&lt;-</span> <span class="fu">ts</span>(ontario_df<span class="sc">$</span>new_cases, <span class="at">frequency =</span> <span class="dv">24</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>d<span class="ot">&lt;-</span><span class="fu">decompose</span>(ts_cases, <span class="st">"multiplicative"</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(d)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>d<span class="ot">&lt;-</span><span class="fu">decompose</span>(ts_cases, <span class="st">"additive"</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Looking at this plot, shown in Figure 1, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the Covid-19 data on Ontario, Canada, we can see that there is a lot of randomness that tends to vary but with a consistent spike around the halfway mark when a new strain of Covid-19 caused an influx of cases.</p>
-<p><img src="decomp.png" class="img-fluid"> <em>Figure 1: Decomposition of <code>new_cases</code> through the raw, observed data, overall trend, seasonality, and randomness</em></p>
+<p>Looking at these plots, shown in Figures 1 and 2, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the Covid-19 data on Ontario, Canada, we can see that there is a lot of randomness that tends to vary but with a consistent spike around the halfway mark when a new strain of Covid-19 caused an influx of cases. Revisit the differences between additive and multiplicative components as described at the top of the guide.</p>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="decomp.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure 1: Decomposition of new_cases through the raw, observed data, overall trend, seasonality, and randomness with multiplicative components"><img src="decomp.png" class="img-fluid figure-img" alt="Figure 1: Decomposition of new_cases through the raw, observed data, overall trend, seasonality, and randomness with multiplicative components"></a></p>
+<figcaption>Figure 1: Decomposition of <code>new_cases</code> through the raw, observed data, overall trend, seasonality, and randomness with multiplicative components</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="decompadd.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure 1: Decomposition of new_cases through the raw, observed data, overall trend, seasonality, and randomness with additive components"><img src="decompadd.png" class="img-fluid figure-img" alt="Figure 1: Decomposition of new_cases through the raw, observed data, overall trend, seasonality, and randomness with additive components"></a></p>
+<figcaption>Figure 1: Decomposition of <code>new_cases</code> through the raw, observed data, overall trend, seasonality, and randomness with additive components</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(ontario_df<span class="sc">$</span>new_cases)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span>
@@ -480,6 +548,8 @@ alternative hypothesis: stationary</code></pre>
 <li><code>labs()</code> are for the axis labels and graph title. Change the strings to fit the description of your data.</li>
 <li><code>theme_minimal()</code> is for aesthetic purposes only.</li>
 </ol>
+<section id="code-for-plotting-results-from-forecast" class="level3" data-number="1.8.1">
+<h3 data-number="1.8.1" class="anchored" data-anchor-id="code-for-plotting-results-from-forecast"><span class="header-section-number">1.8.1</span> Code for plotting results from <code>forecast</code></h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> forecast_df,</span>
@@ -500,6 +570,9 @@ alternative hypothesis: stationary</code></pre>
 <span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Date"</span>) <span class="sc">+</span></span>
 <span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
+<section id="code-for-plotting-results-from-prophet" class="level3" data-number="1.8.2">
+<h3 data-number="1.8.2" class="anchored" data-anchor-id="code-for-plotting-results-from-prophet"><span class="header-section-number">1.8.2</span> Code for plotting results from <code>prophet</code></h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> forecast_p_df,</span>
@@ -516,31 +589,54 @@ alternative hypothesis: stationary</code></pre>
 <span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
+</section>
 <section id="compare" class="level2" data-number="1.9">
 <h2 data-number="1.9" class="anchored" data-anchor-id="compare"><span class="header-section-number">1.9</span> Compare</h2>
-<p>These two plots are examples of ones generated using <code>forecast</code> then <code>prophet</code>. The largest difference that we can see is the way that each handles new predictions. <code>prophet</code> focuses on smoothing out the current raw data then using the trends to predict how future data will behave. In both, the confidence bands in blue showcase that the direction is not conclusive. This could be due to the fact that there are multiple strands of Covid-19 with different transmission rates. Additionally, there are less tests for Covid-19 as vaccines became more widely spread and it was seen as less of a threat as when it first was deemed a global pandemic. Many other external factors could contribute to the near erasure of high inflections in new cases.</p>
+<section id="demonstration" class="level3" data-number="1.9.1">
+<h3 data-number="1.9.1" class="anchored" data-anchor-id="demonstration"><span class="header-section-number">1.9.1</span> Demonstration</h3>
+<p>These two plots are examples of ones generated using <code>forecast</code> then <code>prophet</code>. The largest difference that we can see is the way that each handles new predictions. Figure 3 using <code>prophet</code> focuses on smoothing out the current raw data then using the trends to predict how future data will behave. In both, the confidence bands in blue showcase that the direction is not conclusive. This could be due to the fact that there are multiple strands of Covid-19 with different transmission rates. Additionally, there are less tests for Covid-19 as vaccines became more widely spread and it was seen as less of a threat as when it first was deemed a global pandemic. Many other external factors could contribute to the near erasure of high inflections in new cases.</p>
+<p>Examining <code>forecast</code> more, the plot seems to be more</p>
 <div class="quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="forecast.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure 1: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using forecast"><img src="forecast.png" class="img-fluid figure-img" alt="Figure 1: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using forecast"></a></p>
-<figcaption>Figure 1: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using <code>forecast</code></figcaption>
+<p><a href="forecast.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure 2: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using forecast"><img src="forecast.png" class="img-fluid figure-img" alt="Figure 2: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using forecast"></a></p>
+<figcaption>Figure 2: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using <code>forecast</code></figcaption>
 </figure>
 </div>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="prophet.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure 2: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using prophet"><img src="prophet.png" class="img-fluid figure-img" alt="Figure 2: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using prophet"></a></p>
-<figcaption>Figure 2: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using <code>prophet</code></figcaption>
+<p><a href="prophet.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using prophet"><img src="prophet.png" class="img-fluid figure-img" alt="Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using prophet"></a></p>
+<figcaption>Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using <code>prophet</code></figcaption>
 </figure>
 </div>
 </div>
 </div>
 </div>
+</section>
+<section id="general-guidance" class="level3" data-number="1.9.2">
+<h3 data-number="1.9.2" class="anchored" data-anchor-id="general-guidance"><span class="header-section-number">1.9.2</span> General Guidance</h3>
+<p>Forecasting is a function of existing data. The more data that exists, the more narrow confidence bands will be. When examining the reliability of forecasting, it is best to be aware of the data that you are working with. The biggest issue seen in the demonstration was the predictions going below zero, which goes against the form of the <code>new_cases</code> variable. To explore issues like this, know the bounds of your data and whether or not forecasts break those hard boundaries. Forecasting always comes with the concern that you are extrapolating, therefore the reliability will always be in question as no one knows the future. The further you forecast from the original raw data, the more the reliability will decrease.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-kuruiTidyverseTimeSeries2025" class="csl-entry" role="listitem">
+Kurui, Moses. 2025. <span>“Tidyverse Time Series Analysis in r: Complete Guide. Codepointtech.com.”</span> September 6, 2025. <a href="https://codepointtech.com/mastering-tidyverse-for-time-series-analysis-in-r/">https://codepointtech.com/mastering-tidyverse-for-time-series-analysis-in-r/</a>.
+</div>
+<div id="ref-mushtaqAugmentedDickeyFuller2011" class="csl-entry" role="listitem">
+Mushtaq, Rizwan. 2011. <span>“Augmented Dickey Fuller Test.”</span> Rochester, <span>NY</span>: Social Science Research Network. <a href="https://doi.org/10.2139/ssrn.1911068">https://doi.org/10.2139/ssrn.1911068</a>.
+</div>
+<div id="ref-shmueliPracticalTimeSeries2024" class="csl-entry" role="listitem">
+Shmueli, Galit, and Julia Polak. 2024. <em>Practical Time Series Forecasting with r: A Hands-on Guide [3rd Edition]</em>. Axelrod Schnall Publishers.
+</div>
+<div id="ref-StationarityDifferencingTime" class="csl-entry" role="listitem">
+<span>“Stationarity and Differencing of Time Series Data.”</span> n.d. Accessed March 7, 2026. <a href="https://people.duke.edu/~rnau/411diff.htm">https://people.duke.edu/~rnau/411diff.htm</a>.
+</div>
+</div>
+</section>
 </section>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
