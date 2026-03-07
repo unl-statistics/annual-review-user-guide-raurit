@@ -320,18 +320,19 @@ window.Quarto = {
 <h1 data-number="1"><span class="header-section-number">1</span> Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</h1>
 <p>This user guide will demonstrate how to attain data from COVID-19 using the <code>covid19.analytics</code> package and 2 methods of forecasting with ARIMA in the <code>forecast</code> package and the <code>prophet</code> package, a procedure used for forecasting created by Facebook. Before applying the concepts of time-series forecasting, here are a few notes and definitions to help in comprehending later steps in this guide:</p>
 <ol type="1">
-<li>In practicality, “forecasting” and “prediction” are used interchangeably. Forecasting is prediction but with an emphasis on time-series data. <span class="citation" data-cites="shmueliPracticalTimeSeries2024">Shmueli and Polak (<a href="references.html#ref-shmueliPracticalTimeSeries2024" role="doc-biblioref">2024</a>)</span></li>
+<li>In practicality, “forecasting” and “prediction” are used interchangeably. Forecasting is prediction but with an emphasis on time-series data.</li>
 <li>Time series can be dissected into seasonality, level, trend, and noise.</li>
 </ol>
-<ol type="a">
-<li><strong>seasonality</strong>: “short-term cyclical behavior” <span class="citation" data-cites="shmueliPracticalTimeSeries2024">Shmueli and Polak (<a href="references.html#ref-shmueliPracticalTimeSeries2024" role="doc-biblioref">2024</a>)</span></li>
-<li><strong>level</strong>: “average value of the series” <span class="citation" data-cites="shmueliPracticalTimeSeries2024">Shmueli and Polak (<a href="references.html#ref-shmueliPracticalTimeSeries2024" role="doc-biblioref">2024</a>)</span></li>
-<li><strong>trend</strong>: “change in the series from one period to the next” <span class="citation" data-cites="shmueliPracticalTimeSeries2024">Shmueli and Polak (<a href="references.html#ref-shmueliPracticalTimeSeries2024" role="doc-biblioref">2024</a>)</span></li>
-<li><strong>noise</strong>: “random variation that results from measurement error or other causes” <span class="citation" data-cites="shmueliPracticalTimeSeries2024">Shmueli and Polak (<a href="references.html#ref-shmueliPracticalTimeSeries2024" role="doc-biblioref">2024</a>)</span></li>
-</ol>
+<ul>
+<li><strong>seasonality</strong>: “short-term cyclical behavior”</li>
+<li><strong>level</strong>: “average value of the series”</li>
+<li><strong>trend</strong>: “change in the series from one period to the next”</li>
+<li><strong>noise</strong>: “random variation that results from measurement error or other causes”</li>
+</ul>
 <ol start="3" type="1">
-<li>These components as seen in (2) can either be multiplicative or additive, which describes the relationship between the components described in (2) to achieve the response value. <span class="citation" data-cites="shmueliPracticalTimeSeries2024">Shmueli and Polak (<a href="references.html#ref-shmueliPracticalTimeSeries2024" role="doc-biblioref">2024</a>)</span></li>
+<li>These components as seen in (2) can either be multiplicative or additive, which describes the relationship between the components to achieve the response value.</li>
 </ol>
+<p><span class="citation" data-cites="shmueliPracticalTimeSeries2024">Shmueli and Polak (<a href="references.html#ref-shmueliPracticalTimeSeries2024" role="doc-biblioref">2024</a>)</span></p>
 <section id="open-rstudio" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="open-rstudio"><span class="header-section-number">1.1</span> Open RStudio</h2>
 <p>If you have not yet installed RStudio or would like to update your version of RStudio, visit the following link: <a href="https://posit.co/downloads/">https://posit.co/downloads/</a>. Create a new R script.</p>
@@ -410,7 +411,8 @@ window.Quarto = {
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p><code>skim(df)</code> goes variable by variable in <code>df</code> and displays the summary statistics depending on the type of variable used. While each variable will show its completeness, a numeric variable will show the mean, standard deviation, and percentile values and a character variable will display the minimum number of characters in the string, the maximum number of characters, the number of unique strings, and a few other features. In the date column of the Canada Covid-19 data frame, there are 0 in <code>n_missing</code>, and the <code>min</code> and <code>max</code> values are both at 10. This would indicate that each row has a value for date and it follows some variation of “dd/mm/yyyy” given each has 10 characters. See the next section on what to do in case this is not true.</p>
+<p><code>skim(df)</code> goes variable by variable in <code>df</code> and displays the summary statistics depending on the type of variable used. While each variable will show its completeness, a numeric variable will show the mean, standard deviation, and percentile values and a character variable will display the minimum number of characters in the string, the maximum number of characters, the number of unique strings, and a few other features. In the date column of the Canada Covid-19 data frame, there are 0 in <code>n_missing</code>, and the <code>min</code> and <code>max</code> values are both at 10. This would indicate that each row has a value for date and it follows some variation of “dd/mm/yyyy” given each has 10 characters. See the next section on what to do in case the format does not match.</p>
+<p>If there is missingness in the data, visit this short <a href="https://www.geeksforgeeks.org/data-science/handling-missing-values-in-time-series-data/">guide</a> with various options.</p>
 </section>
 <section id="date-format" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="date-format"><span class="header-section-number">1.4</span> Date Format</h2>
@@ -434,7 +436,7 @@ window.Quarto = {
 </section>
 <section id="clean-data" class="level2" data-number="1.5">
 <h2 data-number="1.5" class="anchored" data-anchor-id="clean-data"><span class="header-section-number">1.5</span> Clean data</h2>
-<p>Create a new data frame as a subset of your previous data frame, selecting only necessary columns. This makes the rest of the steps simpler when there is less information to comb through.</p>
+<p>Create a new data frame as a subset of your previous data frame, selecting only necessary columns. This makes the rest of the steps simpler when there is less information to comb through. The code below is an example of how to use <code>dplyr</code> to transform data to a workable state.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ontario_df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(prname <span class="sc">==</span> <span class="st">"Ontario"</span>) <span class="sc">%&gt;%</span></span>
@@ -447,10 +449,10 @@ window.Quarto = {
 </div>
 <p>In this example, we are filtering based on the province name “Ontario”, which selects all rows in the data frame that belong to Ontario, then sorting by the date. The number of total cases was originally listed as a character variable, so the next few lines such as parsing the number from <code>totalcases</code> and filtering out any missing values is necessary. If total cases or whichever variable you would like to analyze does not have this error, you do not need to include parsing.</p>
 <p>Additionally, the question that we are interested in this case is not the total cases, but the number of new cases. To achieve this, a new column was formed, <code>new_cases</code>, which was then calculated taking the difference between observations of total cases. Sorting via date is important before this step to guarantee that the <code>new_cases</code> shows the difference between the correct dates and not arbitrarily which rows are positioned next to each other.</p>
-<p>Lastly, <code>select</code> is used to isolate which columns are being used later during forecasting.</p>
+<p>Lastly, <code>select()</code> is used to isolate which columns are being used later during forecasting.</p>
 <section id="optional-skim-again" class="level3" data-number="1.5.1">
 <h3 data-number="1.5.1" class="anchored" data-anchor-id="optional-skim-again"><span class="header-section-number">1.5.1</span> Optional: Skim Again</h3>
-<p>Skimming again helps to ensure that your data is in the correct form and that the filtering and mutation did not create any new holes or transformed the data in a way that was not intended.</p>
+<p>Skimming again helps to ensure that your data is in the correct form and that the transformation did not create any new holes or transformed the data in a way that was not intended.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ontario_df)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(ontario_df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -462,7 +464,7 @@ window.Quarto = {
 <p>Most statistical methods of forecasting require an exploration of the property <strong>stationarity</strong>, including ARIMA, which will be discussed later. In short, it means that the mean, variance, autocorrelation structure, and others stay constant over time <span class="citation" data-cites="StationarityDifferencingTime"><span>“Stationarity and Differencing of Time Series Data”</span> (<a href="references.html#ref-StationarityDifferencingTime" role="doc-biblioref">n.d.</a>)</span>. There are multiple ways to investigate this in a data set, both informally and formally. In this user guide, we will go over the Augmented Dickey-Fuller Test (ADF). Others can be found <a href="https://www.geeksforgeeks.org/r-machine-learning/stationarity-of-time-series-data-using-r/">here</a>.</p>
 <section id="augmented-dickey-fuller-adf-test" class="level3" data-number="1.6.1">
 <h3 data-number="1.6.1" class="anchored" data-anchor-id="augmented-dickey-fuller-adf-test"><span class="header-section-number">1.6.1</span> Augmented Dickey-Fuller (ADF) test</h3>
-<p>This is a formal test to see if time series data is stationary, where the null hypothesis is the data is non-stationary and the alternative hypothesis is that the data is stationary. <span class="citation" data-cites="mushtaqAugmentedDickeyFuller2011">Mushtaq (<a href="references.html#ref-mushtaqAugmentedDickeyFuller2011" role="doc-biblioref">2011</a>)</span></p>
+<p>The ADF test is a formal test to see if time series data is stationary, where the null hypothesis says the data is non-stationary and the alternative hypothesis says the data is stationary. <span class="citation" data-cites="mushtaqAugmentedDickeyFuller2011">Mushtaq (<a href="references.html#ref-mushtaqAugmentedDickeyFuller2011" role="doc-biblioref">2011</a>)</span></p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>adf_test <span class="ot">&lt;-</span> <span class="fu">adf.test</span>(ontario_df<span class="sc">$</span>new_cases)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"ADF Test:"</span>)</span>
@@ -485,7 +487,7 @@ alternative hypothesis: stationary</code></pre>
 <section id="r-package-forecast" class="level3" data-number="1.7.1">
 <h3 data-number="1.7.1" class="anchored" data-anchor-id="r-package-forecast"><span class="header-section-number">1.7.1</span> R Package <code>forecast</code></h3>
 <p>The demonstration with the <code>forecast</code> package will be consistent with what is known as Autoregressive Integrated Moving Average (ARIMA). The <code>forecast</code> package is capable of doing other methods of time series forecasting, but we will focus on ARIMA for simplicity’s sake.</p>
-<p>The first step is to decompose the data. This shows the breakdown of trends by the overall trend, the seasonal shifts, and discerned randomness.</p>
+<p>The first step is to decompose the data. This shows the breakdown of trends by the overall trend, the seasonal shifts, and discerned randomness. This mirrors the components of time-series data (level, trend, seasonality, noise).</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ts_cases <span class="ot">&lt;-</span> <span class="fu">ts</span>(ontario_df<span class="sc">$</span>new_cases, <span class="at">frequency =</span> <span class="dv">24</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>d<span class="ot">&lt;-</span><span class="fu">decompose</span>(ts_cases, <span class="st">"multiplicative"</span>)</span>
@@ -493,7 +495,7 @@ alternative hypothesis: stationary</code></pre>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>d<span class="ot">&lt;-</span><span class="fu">decompose</span>(ts_cases, <span class="st">"additive"</span>)</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Looking at these plots, shown in Figures 1 and 2, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the Covid-19 data on Ontario, Canada, we can see that there is a lot of randomness that tends to vary but with a consistent spike around the halfway mark when a new strain of Covid-19 caused an influx of cases. Revisit the differences between additive and multiplicative components as described at the top of the guide.</p>
+<p>Looking at these plots, shown in Figures 1 and 2, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the Covid-19 data on Ontario, Canada, we can see that there is a lot of randomness with a consistent spike around the halfway mark when a new strain of Covid-19 caused an influx of cases. Revisit the differences between additive and multiplicative components as described at the top of the guide.</p>
 <div class="quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
@@ -514,22 +516,36 @@ alternative hypothesis: stationary</code></pre>
 </div>
 </div>
 </div>
+<p>Lastly, all that is left is to fit the model and forecast. The <code>auto.arima()</code> function takes in one vector, which will be the variable that you are trying to predict. Do not pass in your date or time variable. For forecasting, the two parameters are follows:</p>
+<ul>
+<li>object: the object created by the <code>auto.arima()</code> function</li>
+<li>h: the number of periods for forecasting (weekly)</li>
+<li>model: which model was used</li>
+</ul>
+<p>more parameters for customization can be found in the <code>forecast</code> documentation.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(ontario_df<span class="sc">$</span>new_cases)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>forecast_8 <span class="ot">&lt;-</span> <span class="fu">forecast</span>(fit, <span class="at">h =</span> <span class="dv">12</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>forecast_8 <span class="ot">&lt;-</span> <span class="fu">forecast</span>(fit, <span class="at">h =</span> <span class="dv">12</span>, <span class="at">model =</span> <span class="st">"Arima"</span>)</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>forecast_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(forecast_8)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="r-package-prophet" class="level3" data-number="1.7.2">
 <h3 data-number="1.7.2" class="anchored" data-anchor-id="r-package-prophet"><span class="header-section-number">1.7.2</span> R Package <code>prophet</code></h3>
+<p>When using <code>prophet</code>, it is good to keep in mind that is only for <strong>additive</strong> models, written that the user is able to “get a reasonable forecast on messy data with no manual effort” according to its documentation. True to its statement, there are only three functions required to set up a forecast: <code>prophet()</code>, <code>make_future_dataframe()</code>, and <code>predict()</code>.</p>
+<ul>
+<li><code>prophet()</code> requires a data frame with two columns, <code>ds</code> and <code>y</code>. The names are required, and the code below shows how to rename a data frame to fit the requirements. Additionally, the rest of the parameters can be toggled, assumed false unless written as true. These are <code>yearly.seasonality</code>, <code>weekly.seasonality</code>, and <code>daily.seasonality</code>.</li>
+<li><code>make_future_dataframe()</code> requires the object created by <code>prophet()</code>, the number of periods, and what the periods are. In the example, there will be 12 periods with each period being a week.</li>
+<li><code>predict()</code> requires the outputted objects of the previous functions.</li>
+</ul>
+<p>Optional but encouraged: using <code>select()</code> to isolate specific columns. The columns selected will be used for plotting in the next section.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>prophet_df <span class="ot">&lt;-</span> ontario_df <span class="sc">%&gt;%</span> </span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">ds =</span> date, <span class="at">y =</span> new_cases)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">prophet</span>(prophet_df, <span class="at">yearly.seasonality =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>future <span class="ot">&lt;-</span> <span class="fu">make_future_dataframe</span>(m, <span class="at">periods =</span> <span class="dv">52</span>, <span class="at">freq =</span> <span class="st">"week"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>future <span class="ot">&lt;-</span> <span class="fu">make_future_dataframe</span>(m, <span class="at">periods =</span> <span class="dv">12</span>, <span class="at">freq =</span> <span class="st">"week"</span>)</span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>forecast_p <span class="ot">&lt;-</span> <span class="fu">predict</span>(m, future)</span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>forecast_p_df <span class="ot">&lt;-</span> forecast_p <span class="sc">%&gt;%</span> <span class="fu">select</span>(ds, yhat, yhat_lower, yhat_upper)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -593,23 +609,23 @@ alternative hypothesis: stationary</code></pre>
 <h2 data-number="1.9" class="anchored" data-anchor-id="compare"><span class="header-section-number">1.9</span> Compare</h2>
 <section id="demonstration" class="level3" data-number="1.9.1">
 <h3 data-number="1.9.1" class="anchored" data-anchor-id="demonstration"><span class="header-section-number">1.9.1</span> Demonstration</h3>
-<p>These two plots are examples of ones generated using <code>forecast</code> then <code>prophet</code>. The largest difference that we can see is the way that each handles new predictions. Figure 3 using <code>prophet</code> focuses on smoothing out the current raw data then using the trends to predict how future data will behave. In both, the confidence bands in blue showcase that the direction is not conclusive. This could be due to the fact that there are multiple strands of Covid-19 with different transmission rates. Additionally, there are less tests for Covid-19 as vaccines became more widely spread and it was seen as less of a threat as when it first was deemed a global pandemic. Many other external factors could contribute to the near erasure of high inflections in new cases.</p>
-<p>Examining <code>forecast</code> more, the plot seems to be more</p>
+<p>These two plots are examples of ones generated using <code>forecast</code> then <code>prophet</code>. The largest difference that we can see is the way that each handles new predictions. Figure 4 using <code>prophet</code> overlays predictions on top of the current data whereas <code>forecast</code> exclusively predicts beyond the current data. This can be manually changed by editing the limits on time for prediction when plotting. In both, the confidence bands in blue showcase that the direction is not conclusive. This could be due to the fact that there are multiple strands of Covid-19 with different transmission rates that have appeared over time, adding more noise to the forecast. Additionally, there are less tests for Covid-19 as vaccines became more widely spread and it was seen as less of a threat as when it first was deemed a global pandemic. Many other external factors could contribute to the near erasure of high inflections in new cases.</p>
+<p>Examining <code>forecast</code> more, the plot is more realistic simply because the point prediction does not go below zero. The previous trends in seasonality in <code>prophet</code> seems to be forced onto the new data, showing that there is going to be negative new cases, which is impossible since the measure of new cases does not take into account active cases. When someone tests positive for Covid-19, they are added to the new cases, but are not checked up on and removed from the count afterwards.</p>
 <div class="quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="forecast.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure 2: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using forecast"><img src="forecast.png" class="img-fluid figure-img" alt="Figure 2: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using forecast"></a></p>
-<figcaption>Figure 2: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using <code>forecast</code></figcaption>
+<p><a href="forecast.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using forecast"><img src="forecast.png" class="img-fluid figure-img" alt="Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using forecast"></a></p>
+<figcaption>Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using <code>forecast</code></figcaption>
 </figure>
 </div>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="prophet.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using prophet"><img src="prophet.png" class="img-fluid figure-img" alt="Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using prophet"></a></p>
-<figcaption>Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using <code>prophet</code></figcaption>
+<p><a href="prophet.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure 4: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using prophet"><img src="prophet.png" class="img-fluid figure-img" alt="Figure 4: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using prophet"></a></p>
+<figcaption>Figure 4: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using <code>prophet</code></figcaption>
 </figure>
 </div>
 </div>
