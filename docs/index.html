@@ -523,7 +523,9 @@ alternative hypothesis: stationary</code></pre>
 <section id="r-package-forecast" class="level3" data-number="1.6.1">
 <h3 data-number="1.6.1" class="anchored" data-anchor-id="r-package-forecast"><span class="header-section-number">1.6.1</span> R Package <code>forecast</code></h3>
 <p>The demonstration with the <code>forecast</code> package will be consistent with what is known as Autoregressive Integrated Moving Average (ARIMA). The <code>forecast</code> package is capable of doing other methods of time series forecasting, but we will focus on ARIMA for simplicity’s sake.</p>
-<p>The first step is to decompose the data. This shows the breakdown of trends by the overall trend, the seasonal shifts, and discerned randomness. This mirrors the components of time-series data (level, trend, seasonality, noise).</p>
+<section id="decomposition" class="level4" data-number="1.6.1.1">
+<h4 data-number="1.6.1.1" class="anchored" data-anchor-id="decomposition"><span class="header-section-number">1.6.1.1</span> Decomposition</h4>
+<p>The first step is to decompose the data. This shows the breakdown of the time series data by the overall trend, seasonal shifts, and discerned randomness. Reviewing the notes at the beginning of the guide, this mirrors the components of time-series data (level, trend, seasonality, noise).</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ts_cases <span class="ot">&lt;-</span> <span class="fu">ts</span>(ontario_df<span class="sc">$</span>new_cases, <span class="at">frequency =</span> <span class="dv">24</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>d<span class="ot">&lt;-</span><span class="fu">decompose</span>(ts_cases, <span class="st">"multiplicative"</span>)</span>
@@ -531,7 +533,7 @@ alternative hypothesis: stationary</code></pre>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>d<span class="ot">&lt;-</span><span class="fu">decompose</span>(ts_cases, <span class="st">"additive"</span>)</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Looking at these plots, shown in Figures 1 and 2, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the COVID-19 data on Ontario, Canada, we can see that there is a lot of randomness with a consistent spike around the halfway mark when a new strain of COVID-19 caused an influx of cases. Revisit the differences between additive and multiplicative components as described at the top of the guide.</p>
+<p>Looking at these plots, Figures 1 and 2, can provide insight on the structure of your time data. In the case of the COVID-19 data on Ontario, Canada, we can see that there is a lot of noise with a consistent spike around the halfway mark when a new strain of COVID-19 caused an influx of cases.</p>
 <div class="quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
@@ -552,6 +554,14 @@ alternative hypothesis: stationary</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="additive-v.-multiplicative" class="level4" data-number="1.6.1.2">
+<h4 data-number="1.6.1.2" class="anchored" data-anchor-id="additive-v.-multiplicative"><span class="header-section-number">1.6.1.2</span> Additive v. Multiplicative</h4>
+<p>The difference between additive and multiplicative time-series is illustrated by these graphs, but more clearly with the equations below.</p>
+<p><strong>Additive:</strong> <span class="math display">\[y_t = Level + Trend + Seasonality + Noise\]</span> <strong>Multiplicative:</strong> <span class="math display">\[y_t = Level \times Trend \times Seasonality \times Noise\]</span> The largest difference between the two is how the terms interact with each other (<span class="citation" data-cites="shmueliPracticalTimeSeries2024">Shmueli and Polak (<a href="references.html#ref-shmueliPracticalTimeSeries2024" role="doc-biblioref">2024</a>)</span>). When seasonality tends to scale with the model, choose a multiplicative decomposition. In the terms of COVID-19 data, we would opt for multiplicative decomposition as research has allotted for better tactics to mitigate the transmission of the disease and scale back the classification from global pandemic.</p>
+</section>
+<section id="fitting-arima" class="level4" data-number="1.6.1.3">
+<h4 data-number="1.6.1.3" class="anchored" data-anchor-id="fitting-arima"><span class="header-section-number">1.6.1.3</span> Fitting ARIMA</h4>
 <p>Lastly, all that is left is to fit the model and forecast. The <code>auto.arima()</code> function takes in one vector, which will be the variable that you are trying to predict. Do not pass in your date or time variable. For forecasting, the two parameters are follows:</p>
 <ul>
 <li>object: the object created by the <code>auto.arima()</code> function</li>
@@ -566,6 +576,7 @@ alternative hypothesis: stationary</code></pre>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>forecast_8 <span class="ot">&lt;-</span> <span class="fu">forecast</span>(fit, <span class="at">h =</span> <span class="dv">12</span>, <span class="at">model =</span> <span class="st">"Arima"</span>)</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>forecast_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(forecast_8)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
 </section>
 <section id="r-package-prophet" class="level3" data-number="1.6.2">
 <h3 data-number="1.6.2" class="anchored" data-anchor-id="r-package-prophet"><span class="header-section-number">1.6.2</span> R Package <code>prophet</code></h3>

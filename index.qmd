@@ -194,7 +194,8 @@ As we can see above, the p-value resulting from the test is less than $\alpha = 
 
 The demonstration with the `forecast` package will be consistent with what is known as Autoregressive Integrated Moving Average (ARIMA). The `forecast` package is capable of doing other methods of time series forecasting, but we will focus on ARIMA for simplicity's sake.
 
-The first step is to decompose the data. This shows the breakdown of trends by the overall trend, the seasonal shifts, and discerned randomness. This mirrors the components of time-series data (level, trend, seasonality, noise). 
+#### Decomposition
+The first step is to decompose the data. This shows the breakdown of the time series data by the overall trend, seasonal shifts, and discerned randomness. Reviewing the notes at the beginning of the guide, this mirrors the components of time-series data (level, trend, seasonality, noise). 
 
 ```{r}
 #| eval: false
@@ -206,7 +207,7 @@ d<-decompose(ts_cases, "additive")
 plot(d)
 ```
 
-Looking at these plots, shown in Figures 1 and 2, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the COVID-19 data on Ontario, Canada, we can see that there is a lot of randomness with a consistent spike around the halfway mark when a new strain of COVID-19 caused an influx of cases. Revisit the differences between additive and multiplicative components as described at the top of the guide.
+Looking at these plots, Figures 1 and 2, can provide insight on the structure of your time data. In the case of the COVID-19 data on Ontario, Canada, we can see that there is a lot of noise with a consistent spike around the halfway mark when a new strain of COVID-19 caused an influx of cases. 
 
 ::: {layout-ncol=2}
 ![Figure 1: Decomposition of `new_cases` through the raw, observed data, overall trend, seasonality, and randomness with multiplicative components](decomp.png){.lightbox}
@@ -214,6 +215,16 @@ Looking at these plots, shown in Figures 1 and 2, can provide insight on the str
 ![Figure 1: Decomposition of `new_cases` through the raw, observed data, overall trend, seasonality, and randomness with additive components](decompadd.png){.lightbox}
 :::
 
+#### Additive v. Multiplicative
+The difference between additive and multiplicative time-series is illustrated by these graphs, but more clearly with the equations below.
+
+**Additive:**
+$$y_t = Level + Trend + Seasonality + Noise$$
+**Multiplicative:**
+$$y_t = Level \times Trend \times Seasonality \times Noise$$
+The largest difference between the two is how the terms interact with each other (@shmueliPracticalTimeSeries2024). When seasonality tends to scale with the model, choose a multiplicative decomposition. In the terms of COVID-19 data, we would opt for multiplicative decomposition as research has allotted for better tactics to mitigate the transmission of the disease and scale back the classification from global pandemic. 
+
+#### Fitting ARIMA
 Lastly, all that is left is to fit the model and forecast. The `auto.arima()` function takes in one vector, which will be the variable that you are trying to predict. Do not pass in your date or time variable. For forecasting, the two parameters are follows:
 
 - object: the object created by the `auto.arima()` function
