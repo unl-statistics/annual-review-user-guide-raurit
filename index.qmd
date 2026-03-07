@@ -103,7 +103,9 @@ skim(df)
 
 If there is missingness in the data, visit this short [guide](https://www.geeksforgeeks.org/data-science/handling-missing-values-in-time-series-data/) with various options.
 
-## Date Format
+## Cleaning the Data
+
+### Date Format
 
 Before being able to work with dates, you must have only one column for the date variable. If your data does not have date in one column and instead spreads out day, month, and year into multiple columns, you can use the `dplyr` package and the following step to combine columns:
 
@@ -113,7 +115,7 @@ Before being able to work with dates, you must have only one column for the date
 df <- df %>% mutate(date=paste(year, month, day, sep = "-"))
 ```
 
-where `df` is the name of your data frame, `date` is the name of the new column that you are forming, the first three parameters of `paste` are the names of your existing columns of date data, and `sep = "-"` indicates that each field will be separated with a hyphen @kuruiTidyverseTimeSeries2025. These should be modified to fit your use case.
+where `df` is the name of your data frame, `date` is the name of the new column that you are forming, the first three parameters of `paste` are the names of your existing columns of date data, and `sep = "-"` indicates that each field will be separated with a hyphen (@kuruiTidyverseTimeSeries2025). These should be modified to fit your use case.
 
 Next, the package `lubridate` is best for working with dates in R. Once your `date` column properly includes the right content, it is important to ensure that they are in the correct format. For working with time-series data, it is best practice to use `ymd` (year-month-day) format. This format allows the data to be sorted to form chronological order. 
 
@@ -129,9 +131,9 @@ Additionally, it makes more logical sense! The first item in a date sequence sho
 
 > "Europeans get it wrong. Americans get it wrong. Only computer scientists get it right."
 >
-> - *Dr. Chris Bourke 2024, my Computing II professor, about date formats*
+> - *Dr. Chris Bourke, my Computing II professor, about date formats*
 
-## Clean data
+### Transforming Other Variables 
 
 Create a new data frame as a subset of your previous data frame, selecting only necessary columns. This makes the rest of the steps simpler when there is less information to comb through. The code below is an example of how to use `dplyr` to transform data to a workable state. 
 
@@ -160,11 +162,11 @@ To check, use `skim()` and `head()` again to ensure that your data is in the cor
 
 ## Stationarity
 
-Most statistical methods of forecasting require an exploration of the property **stationarity**, including ARIMA, which will be discussed later. In short, it means that the mean, variance, autocorrelation structure, and others stay constant over time @StationarityDifferencingTime. There are multiple ways to investigate this in a data set, both informally and formally. In this user guide, we will go over the Augmented Dickey-Fuller Test (ADF). Others can be found [here](https://www.geeksforgeeks.org/r-machine-learning/stationarity-of-time-series-data-using-r/).
+Most statistical methods of forecasting require an exploration of the property **stationarity**, including ARIMA, which will be discussed later. In short, it means that the mean, variance, autocorrelation structure, and others stay constant over time (@StationarityDifferencingTime). There are multiple ways to investigate this in a data set, both informally and formally. In this user guide, we will go over the Augmented Dickey-Fuller Test (ADF). Others can be found [here](https://www.geeksforgeeks.org/r-machine-learning/stationarity-of-time-series-data-using-r/).
 
 ### Augmented Dickey-Fuller (ADF) test
 
-The ADF test is a formal test to see if time series data is stationary, where the null hypothesis says the data is non-stationary and the alternative hypothesis says the data is stationary. @mushtaqAugmentedDickeyFuller2011
+The ADF test is a formal test to see if time series data is stationary, where the null hypothesis says the data is non-stationary and the alternative hypothesis says the data is stationary (@mushtaqAugmentedDickeyFuller2011).
 
 ```{r}
 #| eval: false
