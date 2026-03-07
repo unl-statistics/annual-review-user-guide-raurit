@@ -1,6 +1,6 @@
 # Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet
 
-This user guide will demonstrate how to attain data from COVID-19 using the `covid19.analytics` package and 2 methods of forecasting with ARIMA in the `forecast` package and the `prophet` package, a procedure used for forecasting created by Facebook. Before applying the concepts of time-series forecasting, here are a few notes and definitions to help in comprehending later steps in this guide:
+This user guide will demonstrate how to attain data from COVID-19 using the `covid19.analytics` package and 2 methods of forecasting with the `forecast` package (using ARIMA) and the `prophet` package, a procedure used for forecasting created by Facebook. Before applying the concepts of time-series forecasting, here are a few notes and definitions to help in comprehending later steps in this guide:
 
 1. In practicality, "forecasting" and "prediction" are used interchangeably. Forecasting is prediction but with an emphasis on time-series data. 
 2. Time series can be dissected into seasonality, level, trend, and noise.
@@ -75,6 +75,22 @@ For a quick temperature check on which packages have been added to the active se
 
 In the `covid19.analytics` package, there are a few data sets that can be loaded in and used for easy examples. This user guide will demonstrate forecasting using its Canada data, accessed through `covid19.Canada.data()`. If you plan to use a different data set, make sure that the data suits the form required for time series analysis. Future sections will explain how to check or obtain the correct format.
 
+`covid19.Canada.data()` is retrieved from [this website](https://health-infobase.canada.ca/covid-19/). We will be using forecasting to predict the number of new cases over time in Ontario, Canada, so the following variables are of importance:
+
+- `prname`
+  - The name of the providence that the data is located in
+  - type: character
+- `totalcases`
+  - The number of total cases of Covid-19
+  - type: character
+- `date`
+  - The date that the observations were taken
+  - type: character
+  
+::: callout-note
+We will have to do some type casting to assure that the variables are the correct types. The total number of cases should not be listed as character and will need to be changed into numeric.
+:::
+
 ```{r}
 #| eval: false
 
@@ -138,15 +154,9 @@ Additionally, the question that we are interested in this case is not the total 
 
 Lastly, `select()` is used to isolate which columns are being used later during forecasting.
 
-### Optional: Skim Again
-
-Skimming again helps to ensure that your data is in the correct form and that the transformation did not create any new holes or transformed the data in a way that was not intended. 
-
-```{r}
-#| eval: false
-head(ontario_df)
-skim(ontario_df)
-```
+::: callout-note
+To check, use `skim()` and `head()` again to ensure that your data is in the correct form and that the transformation did not create any new holes or transformed the data in a way that was not intended. 
+:::
 
 ## Stationarity
 

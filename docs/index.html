@@ -318,7 +318,7 @@ window.Quarto = {
 
 <section id="forecasting-with-covid-19-data-using-r-packages-covid19.analytics-forecast-and-prophet" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</h1>
-<p>This user guide will demonstrate how to attain data from COVID-19 using the <code>covid19.analytics</code> package and 2 methods of forecasting with ARIMA in the <code>forecast</code> package and the <code>prophet</code> package, a procedure used for forecasting created by Facebook. Before applying the concepts of time-series forecasting, here are a few notes and definitions to help in comprehending later steps in this guide:</p>
+<p>This user guide will demonstrate how to attain data from COVID-19 using the <code>covid19.analytics</code> package and 2 methods of forecasting with the <code>forecast</code> package (using ARIMA) and the <code>prophet</code> package, a procedure used for forecasting created by Facebook. Before applying the concepts of time-series forecasting, here are a few notes and definitions to help in comprehending later steps in this guide:</p>
 <ol type="1">
 <li>In practicality, “forecasting” and “prediction” are used interchangeably. Forecasting is prediction but with an emphasis on time-series data.</li>
 <li>Time series can be dissected into seasonality, level, trend, and noise.</li>
@@ -406,6 +406,37 @@ window.Quarto = {
 <section id="load-in-data" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="load-in-data"><span class="header-section-number">1.3</span> Load in Data</h2>
 <p>In the <code>covid19.analytics</code> package, there are a few data sets that can be loaded in and used for easy examples. This user guide will demonstrate forecasting using its Canada data, accessed through <code>covid19.Canada.data()</code>. If you plan to use a different data set, make sure that the data suits the form required for time series analysis. Future sections will explain how to check or obtain the correct format.</p>
+<p><code>covid19.Canada.data()</code> is retrieved from <a href="https://health-infobase.canada.ca/covid-19/">this website</a>. We will be using forecasting to predict the number of new cases over time in Ontario, Canada, so the following variables are of importance:</p>
+<ul>
+<li><code>prname</code>
+<ul>
+<li>The name of the providence that the data is located in</li>
+<li>type: character</li>
+</ul></li>
+<li><code>totalcases</code>
+<ul>
+<li>The number of total cases of Covid-19</li>
+<li>type: character</li>
+</ul></li>
+<li><code>date</code>
+<ul>
+<li>The date that the observations were taken</li>
+<li>type: character</li>
+</ul></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We will have to do some type casting to assure that the variables are the correct types. The total number of cases should not be listed as character and will need to be changed into numeric.</p>
+</div>
+</div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="fu">covid19.Canada.data</span>())</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span>
