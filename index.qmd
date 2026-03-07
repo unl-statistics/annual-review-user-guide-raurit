@@ -16,7 +16,7 @@ This user guide will demonstrate how to attain data from COVID-19 using the `cov
 
 If you have not yet installed RStudio or would like to update your version of RStudio, visit the following link: [https://posit.co/downloads/](https://posit.co/downloads/). Create a new R script.
 
-![](rScript.png)
+![](rScript.png){width=100}
 
 ## Install and Load Packages
 
