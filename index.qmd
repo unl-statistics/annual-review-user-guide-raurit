@@ -101,7 +101,7 @@ skim(df)
 
 `skim(df)` goes variable by variable in `df` and displays the summary statistics depending on the type of variable used. While each variable will show its completeness, a numeric variable will show the mean, standard deviation, and percentile values and a character variable will display the minimum number of characters in the string, the maximum number of characters, the number of unique strings, and a few other features. In the date column of the Canada COVID-19 data frame, there are 0 in `n_missing`, and the `min` and `max` values are both at 10. This would indicate that each row has a value for date and it follows some variation of "dd/mm/yyyy" given each has 10 characters. See the next section on what to do in case the format does not match.
 
-If there is missingness in the data, visit this short [guide](https://www.geeksforgeeks.org/data-science/handling-missing-values-in-time-series-data/) with various options.
+If there is missingness in the data, visit this short [guide](https://www.geeksforgeeks.org/data-science/handling-missing-values-in-time-series-data/).
 
 ## Cleaning the Data
 
@@ -129,9 +129,7 @@ To explain how this format is best, let's say dates were in the day-month-year f
 
 Additionally, it makes more logical sense! The first item in a date sequence should be the most important, which is the year. Often, you can tell more about the context of a date given the year than the month or what day of the month it is.
 
-> "Europeans get it wrong. Americans get it wrong. Only computer scientists get it right."
->
-> - *Dr. Chris Bourke, my Computing II professor, about date formats*
+> "Europeans get it wrong. Americans get it wrong. Only computer scientists get it right." - *Dr. Chris Bourke, my Computing II professor, about date formats*
 
 ### Transforming Other Variables 
 
@@ -150,9 +148,9 @@ ontario_df <- df %>%
   select(date,new_cases)
 ```
 
-In this example, we are filtering based on the province name "Ontario", which selects all rows in the data frame that belong to Ontario, then sorting by the date. The number of total cases was originally listed as a character variable, so the next few lines such as parsing the number from `totalcases` and filtering out any missing values is necessary. If total cases or whichever variable you would like to analyze does not have this error, you do not need to include parsing. 
+In this example, we are filtering based on the province name "Ontario", which selects all rows in the data frame that belong to Ontario, then sorting by the date. The number of total cases was originally listed as a character variable, so the next few lines are used to parse the number from `totalcases` and filtering out any missing values. If the variable you would like to analyze does not have this error, you do not need to include parsing. 
 
-Additionally, the question that we are interested in this case is not the total cases, but the number of new cases. To achieve this, a new column was formed, `new_cases`, which was then calculated taking the difference between observations of total cases. Sorting via date is important before this step to guarantee that the `new_cases` shows the difference between the correct dates and not arbitrarily which rows are positioned next to each other.
+Additionally, the question that we are interested in this case is not the total number of cases, but the number of new cases. To achieve this, a new column was formed, `new_cases`, which was then calculated taking the difference between observations of total cases. Sorting via date is important before this step to guarantee that the `new_cases` shows the difference between the correct dates and not arbitrarily which rows are positioned next to each other.
 
 Lastly, `select()` is used to isolate which columns are being used later during forecasting.
 
@@ -162,7 +160,7 @@ To check, use `skim()` and `head()` again to ensure that your data is in the cor
 
 ## Stationarity
 
-Most statistical methods of forecasting require an exploration of the property **stationarity**, including ARIMA, which will be discussed later. In short, it means that the mean, variance, autocorrelation structure, and others stay constant over time (@StationarityDifferencingTime). There are multiple ways to investigate this in a data set, both informally and formally. In this user guide, we will go over the Augmented Dickey-Fuller Test (ADF). Others can be found [here](https://www.geeksforgeeks.org/r-machine-learning/stationarity-of-time-series-data-using-r/).
+Most statistical methods of forecasting require an exploration of the property **stationarity**, including ARIMA, which will be discussed later. In short, if data are stationarity, it means that the mean, variance, autocorrelation structure, and others stay constant over time (@StationarityDifferencingTime). There are multiple ways to investigate this in a data set, both informally and formally. In this user guide, we will go over the Augmented Dickey-Fuller Test (ADF). Others can be found [here](https://www.geeksforgeeks.org/r-machine-learning/stationarity-of-time-series-data-using-r/).
 
 ### Augmented Dickey-Fuller (ADF) test
 
@@ -188,7 +186,7 @@ p-value = 0.0148
 alternative hypothesis: stationary
 ```
 
-As we can see, the p-value resulting from the test is less than $\alpha = 0.05$, which means that we are 95% confident that we reject the hypothesis that the data is not stationary.
+As we can see above, the p-value resulting from the test is less than $\alpha = 0.05$, which means that we are 95% confident that we reject the null hypothesis, which stated that the data is non-stationary.
 
 ## Forecast New Data
 
