@@ -252,7 +252,7 @@ When using `prophet`, it is good to keep in mind that is only for **additive** m
 - `predict()` requires the outputted objects of the previous functions.
 
 ::: callout-note
-Optional but encouraged: using `select()` to isolate specific columns. The columns selected will be used for plotting in the next section.
+Optional but encouraged: using `select()` to isolate specific columns of the forecasted data frame. The columns selected will be used for plotting in the next section.
 :::
 
 ```{r}
