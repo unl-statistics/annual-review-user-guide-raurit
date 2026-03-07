@@ -227,9 +227,9 @@ The largest difference between the two is how the terms interact with each other
 #### Fitting ARIMA
 Lastly, all that is left is to fit the model and forecast. The `auto.arima()` function takes in one vector, which will be the variable that you are trying to predict. Do not pass in your date or time variable. For forecasting, the two parameters are follows:
 
-- object: the object created by the `auto.arima()` function
-- h: the number of periods for forecasting (weekly)
-- model: which model was used
+- `object`: the object created by the `auto.arima()` function
+- `h`: the number of periods for forecasting (weekly)
+- `model`: which model was used ("Arima", etc.)
 
 more parameters for customization can be found in the `forecast` documentation.
 
@@ -251,7 +251,9 @@ When using `prophet`, it is good to keep in mind that is only for **additive** m
 - `make_future_dataframe()` requires the object created by `prophet()`, the number of periods, and what the periods are. In the example, there will be 12 periods with each period being a week.
 - `predict()` requires the outputted objects of the previous functions.
 
+::: callout-note
 Optional but encouraged: using `select()` to isolate specific columns. The columns selected will be used for plotting in the next section.
+:::
 
 ```{r}
 #| eval: false
