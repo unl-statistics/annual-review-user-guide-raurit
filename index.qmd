@@ -225,7 +225,7 @@ $$y_t = Level \times Trend \times Seasonality \times Noise$$
 The largest difference between the two is how the terms interact with each other (@shmueliPracticalTimeSeries2024). When seasonality tends to scale with the model, choose a multiplicative decomposition. In the terms of COVID-19 data, we would opt for multiplicative decomposition as research has allotted for better tactics to mitigate the transmission of the disease and scale back the classification from global pandemic. 
 
 #### Fitting ARIMA
-Lastly, all that is left is to fit the model and forecast. The `auto.arima()` function takes in one vector, which will be the variable that you are trying to predict. Do not pass in your date or time variable. For forecasting, the two parameters are follows:
+Lastly, all that is left is to fit the model and forecast. The `auto.arima()` function takes in one vector, which will be the variable that you are trying to predict. Do not pass in your date or time variable. For the `forecast()` function, the three parameters used in the example are as follows:
 
 - `object`: the object created by the `auto.arima()` function
 - `h`: the number of periods for forecasting (weekly)
