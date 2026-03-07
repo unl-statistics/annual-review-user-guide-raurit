@@ -83,7 +83,9 @@ head(df)
 skim(df)
 ```
 
-`skim(df)` goes variable by variable in `df` and displays the summary statistics depending on the type of variable used. While each variable will show its completeness, a numeric variable will show the mean, standard deviation, and percentile values and a character variable will display the minimum number of characters in the string, the maximum number of characters, the number of unique strings, and a few other features. In the date column of the Canada Covid-19 data frame, there are 0 in `n_missing`, and the `min` and `max` values are both at 10. This would indicate that each row has a value for date and it follows some variation of "dd/mm/yyyy" given each has 10 characters. See the next section on what to do in case this is not true.
+`skim(df)` goes variable by variable in `df` and displays the summary statistics depending on the type of variable used. While each variable will show its completeness, a numeric variable will show the mean, standard deviation, and percentile values and a character variable will display the minimum number of characters in the string, the maximum number of characters, the number of unique strings, and a few other features. In the date column of the Canada Covid-19 data frame, there are 0 in `n_missing`, and the `min` and `max` values are both at 10. This would indicate that each row has a value for date and it follows some variation of "dd/mm/yyyy" given each has 10 characters. See the next section on what to do in case the format does not match.
+
+If there is missingness in the data, visit this short [guide](https://www.geeksforgeeks.org/data-science/handling-missing-values-in-time-series-data/) with various options.
 
 ## Date Format
 
@@ -115,7 +117,7 @@ Additionally, it makes more logical sense! The first item in a date sequence sho
 
 ## Clean data
 
-Create a new data frame as a subset of your previous data frame, selecting only necessary columns. This makes the rest of the steps simpler when there is less information to comb through.
+Create a new data frame as a subset of your previous data frame, selecting only necessary columns. This makes the rest of the steps simpler when there is less information to comb through. The code below is an example of how to use `dplyr` to transform data to a workable state. 
 
 ```{r}
 #| eval: false
@@ -134,11 +136,11 @@ In this example, we are filtering based on the province name "Ontario", which se
 
 Additionally, the question that we are interested in this case is not the total cases, but the number of new cases. To achieve this, a new column was formed, `new_cases`, which was then calculated taking the difference between observations of total cases. Sorting via date is important before this step to guarantee that the `new_cases` shows the difference between the correct dates and not arbitrarily which rows are positioned next to each other.
 
-Lastly, `select` is used to isolate which columns are being used later during forecasting.
+Lastly, `select()` is used to isolate which columns are being used later during forecasting.
 
 ### Optional: Skim Again
 
-Skimming again helps to ensure that your data is in the correct form and that the filtering and mutation did not create any new holes or transformed the data in a way that was not intended. 
+Skimming again helps to ensure that your data is in the correct form and that the transformation did not create any new holes or transformed the data in a way that was not intended. 
 
 ```{r}
 #| eval: false
@@ -152,7 +154,7 @@ Most statistical methods of forecasting require an exploration of the property *
 
 ### Augmented Dickey-Fuller (ADF) test
 
-This is a formal test to see if time series data is stationary, where the null hypothesis says the data is non-stationary and the alternative hypothesis says the data is stationary. @mushtaqAugmentedDickeyFuller2011
+The ADF test is a formal test to see if time series data is stationary, where the null hypothesis says the data is non-stationary and the alternative hypothesis says the data is stationary. @mushtaqAugmentedDickeyFuller2011
 
 ```{r}
 #| eval: false
@@ -182,7 +184,7 @@ As we can see, the p-value resulting from the test is less than $\alpha = 0.05$,
 
 The demonstration with the `forecast` package will be consistent with what is known as Autoregressive Integrated Moving Average (ARIMA). The `forecast` package is capable of doing other methods of time series forecasting, but we will focus on ARIMA for simplicity's sake.
 
-The first step is to decompose the data. This shows the breakdown of trends by the overall trend, the seasonal shifts, and discerned randomness. 
+The first step is to decompose the data. This shows the breakdown of trends by the overall trend, the seasonal shifts, and discerned randomness. This mirrors the components of time-series data (level, trend, seasonality, noise). 
 
 ```{r}
 #| eval: false
@@ -194,7 +196,7 @@ d<-decompose(ts_cases, "additive")
 plot(d)
 ```
 
-Looking at these plots, shown in Figures 1 and 2, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the Covid-19 data on Ontario, Canada, we can see that there is a lot of randomness that tends to vary but with a consistent spike around the halfway mark when a new strain of Covid-19 caused an influx of cases. Revisit the differences between additive and multiplicative components as described at the top of the guide.
+Looking at these plots, shown in Figures 1 and 2, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the Covid-19 data on Ontario, Canada, we can see that there is a lot of randomness with a consistent spike around the halfway mark when a new strain of Covid-19 caused an influx of cases. Revisit the differences between additive and multiplicative components as described at the top of the guide.
 
 ::: {layout-ncol=2}
 ![Figure 1: Decomposition of `new_cases` through the raw, observed data, overall trend, seasonality, and randomness with multiplicative components](decomp.png){.lightbox}
@@ -202,17 +204,33 @@ Looking at these plots, shown in Figures 1 and 2, can provide insight on the str
 ![Figure 1: Decomposition of `new_cases` through the raw, observed data, overall trend, seasonality, and randomness with additive components](decompadd.png){.lightbox}
 :::
 
+Lastly, all that is left is to fit the model and forecast. The `auto.arima()` function takes in one vector, which will be the variable that you are trying to predict. Do not pass in your date or time variable. For forecasting, the two parameters are follows:
+
+- object: the object created by the `auto.arima()` function
+- h: the number of periods for forecasting (weekly)
+- model: which model was used
+
+more parameters for customization can be found in the `forecast` documentation.
+
 ```{r}
 #| eval: false
 
 fit <- auto.arima(ontario_df$new_cases)
 summary(fit)
 
-forecast_8 <- forecast(fit, h = 12)
+forecast_8 <- forecast(fit, h = 12, model = "Arima")
 forecast_df <- data.frame(forecast_8)
 ```
 
 ### R Package `prophet`
+
+When using `prophet`, it is good to keep in mind that is only for **additive** models, written that the user is able to "get a reasonable forecast on messy data with no manual effort" according to its documentation. True to its statement, there are only three functions required to set up a forecast: `prophet()`, `make_future_dataframe()`, and `predict()`.
+
+- `prophet()` requires a data frame with two columns, `ds` and `y`. The names are required, and the code below shows how to rename a data frame to fit the requirements. Additionally, the rest of the parameters can be toggled, assumed false unless written as true. These are `yearly.seasonality`, `weekly.seasonality`, and `daily.seasonality`.
+- `make_future_dataframe()` requires the object created by `prophet()`, the number of periods, and what the periods are. In the example, there will be 12 periods with each period being a week.
+- `predict()` requires the outputted objects of the previous functions.
+
+Optional but encouraged: using `select()` to isolate specific columns. The columns selected will be used for plotting in the next section.
 
 ```{r}
 #| eval: false
@@ -221,7 +239,7 @@ prophet_df <- ontario_df %>%
   rename(ds = date, y = new_cases)
 
 m <- prophet(prophet_df, yearly.seasonality = TRUE)
-future <- make_future_dataframe(m, periods = 52, freq = "week")
+future <- make_future_dataframe(m, periods = 12, freq = "week")
 forecast_p <- predict(m, future)
 
 forecast_p_df <- forecast_p %>% select(ds, yhat, yhat_lower, yhat_upper)
@@ -284,9 +302,9 @@ ggplot() +
 
 ### Demonstration
 
-These two plots are examples of ones generated using `forecast` then `prophet`. The largest difference that we can see is the way that each handles new predictions. Figure 4 using `prophet` focuses on smoothing out the current raw data then using the trends to predict how future data will behave. In both, the confidence bands in blue showcase that the direction is not conclusive. This could be due to the fact that there are multiple strands of Covid-19 with different transmission rates. Additionally, there are less tests for Covid-19 as vaccines became more widely spread and it was seen as less of a threat as when it first was deemed a global pandemic. Many other external factors could contribute to the near erasure of high inflections in new cases.
+These two plots are examples of ones generated using `forecast` then `prophet`. The largest difference that we can see is the way that each handles new predictions. Figure 4 using `prophet` overlays predictions on top of the current data whereas `forecast` exclusively predicts beyond the current data. This can be manually changed by editing the limits on time for prediction when plotting. In both, the confidence bands in blue showcase that the direction is not conclusive. This could be due to the fact that there are multiple strands of Covid-19 with different transmission rates that have appeared over time, adding more noise to the forecast. Additionally, there are less tests for Covid-19 as vaccines became more widely spread and it was seen as less of a threat as when it first was deemed a global pandemic. Many other external factors could contribute to the near erasure of high inflections in new cases.
 
-Examining `forecast` more, the plot seems to be more 
+Examining `forecast` more, the plot is more realistic simply because the point prediction does not go below zero. The previous trends in seasonality in `prophet` seems to be forced onto the new data, showing that there is going to be negative new cases, which is impossible since the measure of new cases does not take into account active cases. When someone tests positive for Covid-19, they are added to the new cases, but are not checked up on and removed from the count afterwards.
 
 ::: {layout-ncol=2}
 ![Figure 3: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using `forecast`](forecast.png){.lightbox}
