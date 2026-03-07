@@ -110,6 +110,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -261,7 +290,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="forecasting-with-covid-19-data-using-r-packages-covid19.analytics-forecast-and-prophet" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Forecasting with COVID-19 data using R packages covid19.analytics, forecast, and prophet</h1>
-<p>This user guide will demonstrate how to attain data from COVID-19 using the <code>covid19.analytics</code></p>
+<p>This user guide will demonstrate how to attain data from COVID-19 using the <code>covid19.analytics</code> and explore various methods of forecasting.</p>
 <section id="open-rstudio" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="open-rstudio"><span class="header-section-number">1.1</span> Open RStudio</h2>
 <p>If you have not yet installed RStudio or would like to update your version of RStudio, visit the following link: <a href="https://posit.co/downloads/">https://posit.co/downloads/</a>. Create a new R script.</p>
@@ -301,7 +330,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul></li>
 <li><code>prophet</code>
 <ul>
-<li>package that allows for forecasting with more complex trends such as seasonal trends</li>
+<li>package that allows for forecasting created by facebook</li>
 </ul></li>
 <li><code>tseries</code>
 <ul>
@@ -385,7 +414,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="stationarity" class="level2" data-number="1.6">
 <h2 data-number="1.6" class="anchored" data-anchor-id="stationarity"><span class="header-section-number">1.6</span> Stationarity</h2>
-<p>Most statistical methods require an exploration of the property <strong>stationarity</strong>, including ARIMA, which will be discussed later. In short, it means that the mean, variance, autocorrelation structure, and others stay constant over time. There are multiple ways to investigate this in a data set. In this user guide, we will go over the Augmented Dickey-Fuller Test (ADF). Others can be found <a href="https://www.geeksforgeeks.org/r-machine-learning/stationarity-of-time-series-data-using-r/">here</a>.</p>
+<p>Most statistical methods of forecasting require an exploration of the property <strong>stationarity</strong>, including ARIMA, which will be discussed later. In short, it means that the mean, variance, autocorrelation structure, and others stay constant over time. There are multiple ways to investigate this in a data set. In this user guide, we will go over the Augmented Dickey-Fuller Test (ADF). Others can be found <a href="https://www.geeksforgeeks.org/r-machine-learning/stationarity-of-time-series-data-using-r/">here</a>.</p>
 <section id="augmented-dickey-fuller-adf-test" class="level3" data-number="1.6.1">
 <h3 data-number="1.6.1" class="anchored" data-anchor-id="augmented-dickey-fuller-adf-test"><span class="header-section-number">1.6.1</span> Augmented Dickey-Fuller (ADF) test</h3>
 <div class="cell">
@@ -393,6 +422,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"ADF Test:"</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(adf_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>The following output was obtained through running the code:</p>
 <pre><code>[1] "ADF Test:"
 
     Augmented Dickey-Fuller Test
@@ -401,6 +431,7 @@ data:  ontario_df$new_cases
 Dickey-Fuller = -3.9025, Lag order = 6,
 p-value = 0.0148
 alternative hypothesis: stationary</code></pre>
+<p>As we can see, the p-value resulting from the test is less than <span class="math inline">\(/alpha = 0.05\)</span>, which means that we are 95% confident that we reject the hypothesis that the data is not stationary.</p>
 </section>
 </section>
 <section id="forecast-new-data" class="level2" data-number="1.7">
@@ -408,12 +439,14 @@ alternative hypothesis: stationary</code></pre>
 <section id="r-package-forecast" class="level3" data-number="1.7.1">
 <h3 data-number="1.7.1" class="anchored" data-anchor-id="r-package-forecast"><span class="header-section-number">1.7.1</span> R Package <code>forecast</code></h3>
 <p>The demonstration with the <code>forecast</code> package will be consistent with what is known as Autoregressive Integrated Moving Average (ARIMA). The <code>forecast</code> package is capable of doing other methods of time series forecasting, but we will focus on ARIMA for simplicity’s sake.</p>
-<p>The first step is to decompose the data. This shows the breakdown of trends by the overall trend, the seasonal shifts, and discerned randomness. Looking at this plot, shown in Figure 1, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the Covid-19 data on Ontario, Canada, we can see that there is a lot of randomness that tends to vary but with a consistent spike around the halfway mark when a new strain of Covid-19 caused an influx of cases.</p>
+<p>The first step is to decompose the data. This shows the breakdown of trends by the overall trend, the seasonal shifts, and discerned randomness.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ts_cases <span class="ot">&lt;-</span> <span class="fu">ts</span>(ontario_df<span class="sc">$</span>new_cases, <span class="at">frequency =</span> <span class="dv">24</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>d<span class="ot">&lt;-</span><span class="fu">decompose</span>(ts_cases, <span class="st">"multiplicative"</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Looking at this plot, shown in Figure 1, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the Covid-19 data on Ontario, Canada, we can see that there is a lot of randomness that tends to vary but with a consistent spike around the halfway mark when a new strain of Covid-19 caused an influx of cases.</p>
+<p><img src="decomp.png" class="img-fluid"> <em>Figure 1: Decomposition of <code>new_cases</code> through the raw, observed data, overall trend, seasonality, and randomness</em></p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">auto.arima</span>(ontario_df<span class="sc">$</span>new_cases)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span>
@@ -438,23 +471,31 @@ alternative hypothesis: stationary</code></pre>
 </section>
 <section id="plot" class="level2" data-number="1.8">
 <h2 data-number="1.8" class="anchored" data-anchor-id="plot"><span class="header-section-number">1.8</span> Plot</h2>
-<p>For comparison, plot both the forecasted and original data. You can copy the following code and change parameters to fit the naming convention of your own code.</p>
+<p>For comparison, plot both the forecasted and original data. You can copy the following code and change parameters to fit the naming convention of your own code. Both plots include the following:</p>
+<ol type="1">
+<li><code>ggplot()</code> to initialize the plots being created</li>
+<li><code>geom_ribbon()</code>, which graphs the bands of confidence around the forecasted data. The parameters of <code>ymin</code> and <code>ymax</code> differ between the two as the outputs of both forecasting packages are different. <code>length.out</code> should match the parameter <code>h</code> when used in the function <code>forecast</code>. Pay attention to the difference in <code>x</code> for both as well.</li>
+<li><code>geom_line()</code> with the color black is the same for both. This is your original raw data that will be used for visual comparison with the forecasted data.</li>
+<li><code>geom_line()</code> with the color red is the point forecasted data. Note that the input for <code>x</code> should be the same as it is in <code>geom_ribbon()</code> for both while <code>y</code> reflects the point estimate output of each method.</li>
+<li><code>labs()</code> are for the axis labels and graph title. Change the strings to fit the description of your data.</li>
+<li><code>theme_minimal()</code> is for aesthetic purposes only.</li>
+</ol>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> forecast_df,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="fu">max</span>(ontario_df<span class="sc">$</span>date) <span class="sc">+</span> <span class="dv">7</span>, <span class="at">by =</span> <span class="st">"week"</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="fu">max</span>(ontario_df<span class="sc">$</span>date), <span class="at">by =</span> <span class="st">"week"</span>,</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">length.out =</span> <span class="dv">12</span>), <span class="at">ymin =</span> Lo<span class="fl">.95</span>, <span class="at">ymax =</span> Hi<span class="fl">.95</span>),</span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill =</span> <span class="st">"lightblue"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> ontario_df,</span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> new_cases),</span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> forecast_df,</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="fu">max</span>(ontario_df<span class="sc">$</span>date) <span class="sc">+</span> <span class="dv">7</span>,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="fu">max</span>(ontario_df<span class="sc">$</span>date),</span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>                        <span class="at">by =</span> <span class="st">"week"</span>,</span>
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>                        <span class="at">length.out =</span> <span class="dv">12</span>),</span>
 <span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> Point.Forecast),</span>
 <span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Ontario Weekly COVID Cases Forecast"</span>,</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Ontario Weekly COVID Cases Forecast (forecast)"</span>,</span>
 <span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"New Cases"</span>,</span>
 <span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Date"</span>) <span class="sc">+</span></span>
 <span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -470,14 +511,14 @@ alternative hypothesis: stationary</code></pre>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> forecast_p_df,</span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> ds, <span class="at">y =</span> yhat),</span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Ontario Weekly COVID Cases Forecast (Prophet)"</span>,</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Ontario Weekly COVID Cases Forecast (prophet)"</span>,</span>
 <span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Date"</span>, <span class="at">y =</span> <span class="st">"New Cases"</span>) <span class="sc">+</span></span>
 <span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="compare" class="level2" data-number="1.9">
 <h2 data-number="1.9" class="anchored" data-anchor-id="compare"><span class="header-section-number">1.9</span> Compare</h2>
-<p>These two plots are examples of ones generated using <code>forecast</code> then <code>prophet</code>.</p>
+<p>These two plots are examples of ones generated using <code>forecast</code> then <code>prophet</code>. The largest difference that we can see is the way that each handles new predictions. <code>prophet</code> focuses on smoothing out the current raw data then using the trends to predict how future data will behave. In both, the confidence bands in blue showcase that the direction is not conclusive. This could be due to the fact that there are multiple strands of Covid-19 with different transmission rates. Additionally, there are less tests for Covid-19 as vaccines became more widely spread and it was seen as less of a threat as when it first was deemed a global pandemic. Many other external factors could contribute to the near erasure of high inflections in new cases.</p>
 <div class="quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">

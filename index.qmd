@@ -27,7 +27,7 @@ Install the following packages[^1] if you have not already:
   - `skimr`
     - package used to skim data frames for basic data exploration and suggestion of the forms of the data used. It gives summary statistics of each column in a data frame
   - `prophet`
-    - package that allows for forecasting with more complex trends such as seasonal trends
+    - package that allows for forecasting created by facebook
   - `tseries`
     - package which will be used for checking assumptions for time series data
     
@@ -134,7 +134,7 @@ skim(ontario_df)
 
 ## Stationarity
 
-Most statistical methods require an exploration of the property **stationarity**, including ARIMA, which will be discussed later. In short, it means that the mean, variance, autocorrelation structure, and others stay constant over time. There are multiple ways to investigate this in a data set. In this user guide, we will go over the Augmented Dickey-Fuller Test (ADF). Others can be found [here](https://www.geeksforgeeks.org/r-machine-learning/stationarity-of-time-series-data-using-r/).
+Most statistical methods of forecasting require an exploration of the property **stationarity**, including ARIMA, which will be discussed later. In short, it means that the mean, variance, autocorrelation structure, and others stay constant over time. There are multiple ways to investigate this in a data set. In this user guide, we will go over the Augmented Dickey-Fuller Test (ADF). Others can be found [here](https://www.geeksforgeeks.org/r-machine-learning/stationarity-of-time-series-data-using-r/).
 
 ### Augmented Dickey-Fuller (ADF) test
 
@@ -145,6 +145,7 @@ adf_test <- adf.test(ontario_df$new_cases)
 print("ADF Test:")
 print(adf_test)
 ```
+The following output was obtained through running the code:
 
 ```
 [1] "ADF Test:"
@@ -157,13 +158,15 @@ p-value = 0.0148
 alternative hypothesis: stationary
 ```
 
+As we can see, the p-value resulting from the test is less than $/alpha = 0.05$, which means that we are 95% confident that we reject the hypothesis that the data is not stationary.
+
 ## Forecast New Data
 
 ### R Package `forecast`
 
 The demonstration with the `forecast` package will be consistent with what is known as Autoregressive Integrated Moving Average (ARIMA). The `forecast` package is capable of doing other methods of time series forecasting, but we will focus on ARIMA for simplicity's sake.
 
-The first step is to decompose the data. This shows the breakdown of trends by the overall trend, the seasonal shifts, and discerned randomness. Looking at this plot, shown in Figure 1, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the Covid-19 data on Ontario, Canada, we can see that there is a lot of randomness that tends to vary but with a consistent spike around the halfway mark when a new strain of Covid-19 caused an influx of cases.
+The first step is to decompose the data. This shows the breakdown of trends by the overall trend, the seasonal shifts, and discerned randomness. 
 
 ```{r}
 #| eval: false
@@ -173,8 +176,10 @@ d<-decompose(ts_cases, "multiplicative")
 plot(d)
 ```
 
-![](decomp.png)
+Looking at this plot, shown in Figure 1, can provide insight on the structure of your time data. Often, it can show if there is a clear pattern or not. In the case of the Covid-19 data on Ontario, Canada, we can see that there is a lot of randomness that tends to vary but with a consistent spike around the halfway mark when a new strain of Covid-19 caused an influx of cases.
 
+![](decomp.png)
+*Figure 1: Decomposition of `new_cases` through the raw, observed data, overall trend, seasonality, and randomness*
 
 ```{r}
 #| eval: false
@@ -203,26 +208,33 @@ forecast_p_df <- forecast_p %>% select(ds, yhat, yhat_lower, yhat_upper)
 
 ## Plot
 
-For comparison, plot both the forecasted and original data. You can copy the following code and change parameters to fit the naming convention of your own code.
+For comparison, plot both the forecasted and original data. You can copy the following code and change parameters to fit the naming convention of your own code. Both plots include the following:
+
+1. `ggplot()` to initialize the plots being created
+2. `geom_ribbon()`, which graphs the bands of confidence around the forecasted data. The parameters of `ymin` and `ymax` differ between the two as the outputs of both forecasting packages are different. `length.out` should match the parameter `h` when used in the function `forecast`. Pay attention to the difference in `x` for both as well.
+3. `geom_line()` with the color black is the same for both. This is your original raw data that will be used for visual comparison with the forecasted data.
+4. `geom_line()` with the color red is the point forecasted data. Note that the input for `x` should be the same as it is in `geom_ribbon()` for both while `y` reflects the point estimate output of each method.
+5. `labs()` are for the axis labels and graph title. Change the strings to fit the description of your data.
+6. `theme_minimal()` is for aesthetic purposes only. 
 
 ```{r}
 #| eval: false
 
 ggplot() +
   geom_ribbon(data = forecast_df,
-              aes(x = seq(max(ontario_df$date) + 7, by = "week",
+              aes(x = seq(max(ontario_df$date), by = "week",
                           length.out = 12), ymin = Lo.95, ymax = Hi.95),
               fill = "lightblue", alpha = 0.5) +
   geom_line(data = ontario_df,
             aes(x = date, y = new_cases),
             color = "black") +
   geom_line(data = forecast_df,
-            aes(x = seq(max(ontario_df$date) + 7,
+            aes(x = seq(max(ontario_df$date),
                         by = "week",
                         length.out = 12),
                 y = Point.Forecast),
             color = "red") +
-  labs(title = "Ontario Weekly COVID Cases Forecast",
+  labs(title = "Ontario Weekly COVID Cases Forecast (forecast)",
        y = "New Cases",
        x = "Date") +
   theme_minimal()
@@ -240,14 +252,14 @@ ggplot() +
   geom_line(data = forecast_p_df,
             aes(x = ds, y = yhat),
             color = "red") +
-  labs(title = "Ontario Weekly COVID Cases Forecast (Prophet)",
+  labs(title = "Ontario Weekly COVID Cases Forecast (prophet)",
        x = "Date", y = "New Cases") +
   theme_minimal()
 ```
 
 ## Compare
 
-These two plots are examples of ones generated using `forecast` then `prophet`. 
+These two plots are examples of ones generated using `forecast` then `prophet`. The largest difference that we can see is the way that each handles new predictions. `prophet` focuses on smoothing out the current raw data then using the trends to predict how future data will behave. In both, the confidence bands in blue showcase that the direction is not conclusive. This could be due to the fact that there are multiple strands of Covid-19 with different transmission rates. Additionally, there are less tests for Covid-19 as vaccines became more widely spread and it was seen as less of a threat as when it first was deemed a global pandemic. Many other external factors could contribute to the near erasure of high inflections in new cases.
 
 ::: {layout-ncol=2}
 ![Figure 1: Forecasted plot of COVID-19 weekly new cases in Ontario, Canada using `forecast`](forecast.png){.lightbox}
